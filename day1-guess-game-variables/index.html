@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Guess Game</title>
+</head>
+<body>
+    <script>
+        var name = prompt("Enter your name: ");
+        // console.log(name);
+        var number = Math.ceil(Math.random() * 100);
+        console.log(number);
+        var maxGuess = 10;
+        var userGuess;
+        var start = 1, end = 100;
+        for(var i = 0; i <= maxGuess; i++) {
+            var guessNumber = prompt("Guess my number between " +start+ ' and ' +end);
+            if(guessNumber < number) {
+                start = guessNumber;
+                console.log('OOPS!!! your guess was low!');
+            } else if(guessNumber > number) {
+                end = guessNumber;
+                console.log('OOPS!!! Your guess was high!');
+            } else if(guessNumber == number) {
+                console.log('Good Job ' +name + ' You guessed my number');
+                break;
+            }
+        }
+    </script>
+</body>
+</html>
