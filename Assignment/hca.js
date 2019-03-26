@@ -4,13 +4,17 @@ var hca = [
         expertise : 'asthma eczema food allergies',
         specialty: 'Allergists',
         count: 0
-
     },
     {
         doctor: 'Sita',
         expertise : 'heart failure heart attack high blood pressure',
         specialty: 'Cardiologists',
         count: 0
+    },
+    {
+        doctor: 'Laxman',
+        expertise: 'diabetes thyroid problems infertility calcium bone disorders',
+        specialty: 'Endocrinologists'
     }
 ];
 
