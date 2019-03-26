@@ -1,20 +1,40 @@
-var a = [
+var hca = [
     {
         doctor: 'Rama',
-        expertise : [ 'asthma', 'eczema', 'food allergies'],
-        specialty: 'Allergists'
+        expertise : 'asthma eczema food allergies',
+        specialty: 'Allergists',
+        count: 0
 
     },
     {
         doctor: 'Sita',
-        expertise : [ 'heart failure', 'heart attack', 'high blood pressure'],
-        specialty: 'Cardiologists'
+        expertise : 'heart failure heart attack high blood pressure',
+        specialty: 'Cardiologists',
+        count: 0
     }
 ];
 
-var b = 'i have high blood pressure';
+var b = 'i have heart failure';
 var c = b.split(' ');
-console.log(c);
-a.forEach(function(a) {
-    
+// console.log(c);
+var count = 0;
+hca.forEach((a) => {
+    let exp = a.expertise.split(' ');
+    exp.forEach((e) => {
+        c.forEach((e2) => {
+            if(e == e2) {
+                count++;
+                a.count = count;
+            }
+        });
+    });
 });
+
+const max = hca.reduce(function(prev, current) {
+    return (prev.count > current.count) ? prev : current
+});
+
+console.log(max);
+// console.log(hca);
+
+
