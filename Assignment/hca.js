@@ -14,7 +14,8 @@ var hca = [
     {
         doctor: 'Laxman',
         expertise: 'diabetes thyroid problems infertility calcium bone disorders',
-        specialty: 'Endocrinologists'
+        specialty: 'Endocrinologists',
+        count: 0
     }
 ];
 
