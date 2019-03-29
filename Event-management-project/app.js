@@ -36,9 +36,16 @@ app.use('/', express.static(path.join(__dirname + 'views')));
 //Home Page
 app.get('/', function(req, res) {
     res.send(`
-        <h3> This is HomePage </h3>
-        <a href='/registration'>Click here for Registration</a><br><br>
-        <a href='/login'>Click here for Login</a>
+        <html>
+        <head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
+        <body>
+            <div class='text-center container pt-5'>
+                <h3>This is HomePage </h3><br><br>
+                <a href='/registration'>Click here for Registration</a><br><br>
+                <a href='/login'>Click here for Login</a>
+            </div>
+        </body>
+        </html>
     `);
 });
 
