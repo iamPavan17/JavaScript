@@ -23,6 +23,7 @@ db.connect((err) => {
 
 const app = express();
 
+//used for session variables
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -71,7 +72,6 @@ app.post('/reg', (req, res) => {
                 list_performance: '',
                 training: '',
                 about:''
-
             }
             let artistQuery = db.query('insert into artist set ?', artistData, (err, result) => {
                 if(err) throw err;
@@ -284,8 +284,6 @@ app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 })
-
-
 
 app.listen('3000', () => {
     console.log('Server started on port 3000...');
