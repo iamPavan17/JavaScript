@@ -8,10 +8,10 @@ const path = require('path');
 const flash = require('express-flash-notification');
 
 const db = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : '',
-	database : 'event'
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'event'
 });
 
 db.connect((err) => {
@@ -23,11 +23,10 @@ db.connect((err) => {
 
 const app = express();
 
-//used for session variables
 app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use(bodyParser.urlencoded({extended : true}));
@@ -108,7 +107,7 @@ app.post('/log', (req, res) => {
             req.session.list_performance = result[0].list_performance;
             req.session.training = result[0].training;
         });
-        console.log(req.session.about);
+        // console.log(req.session.about);
         let query = db.query(sql, (err, result) => {
             if(err) throw err;
             var countResult = result[0];
