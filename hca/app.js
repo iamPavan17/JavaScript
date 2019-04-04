@@ -78,7 +78,7 @@ app.post('/patient', (req, res) => {
             return (prev.count > curr.count) ? prev : curr
         });
 
-        console.log(max.doctor);
+        // console.log(max.doctor);
 
         let sql = `SELECT * FROM doctor WHERE d_name = '${max.doctor}'`;
         let query = db.query(sql, (err, result) => {
@@ -88,8 +88,7 @@ app.post('/patient', (req, res) => {
             ab[0]['s3'] = result[0].d_specialist.split(' ')[2];
             // console.log(ab);
             res.render('display_doctor', {display: ab});
-            console.log(result);
-
+            // console.log(result);
             var appData = {
                 d_id: result[0].d_id,
                 p_name: data.name,
@@ -105,7 +104,7 @@ app.post('/patient', (req, res) => {
                     var idResult = result[0];
                     var idCount = [];
                     for(var i in idResult) {
-                        idCount.push(idResult[i]);
+                        idCount.push(idResult[i]);  //returns current time in 24 hrs
                     }
                     var time = [];
                     // console.log(idCount); //returns the current time
@@ -115,50 +114,87 @@ app.post('/patient', (req, res) => {
                         time.push({count: 2, t: 13});
                     } else if(idCount < Number(time3)) {
                         time.push({count: 3, t: 15});
-                    } else {
-                        time.push({count: 4, t: 17});
-                    }
+                    } 
 
                     var db_name = [];
                     db_name[0] = 'first_day';
 
-                    // console.log(time[0]);
-                    if(db_name[0] == 'first_day'){
-                        if(time[0].count <= 3) {
-                            let query2 = db.query(`INSERT INTO ${db_name[0]} (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE())`, (err, result) => {
-                                if(err) throw err;
-                                console.log('INSERTED TO first_day');
-                            });
+                    let CountQuery = db.query('SELECT COUNT(*) FROM first_day', (err, result) => {
+                        var cnt = [];
+                        var cntrs = result[0];
+                        for(var i in cntrs) {
+                            cnt.push(cntrs[i]);
                         }
-                        else {
-                            db_name[0] = 'second_day';
-                        }
-                    }
-                    // console.log(db_name[0]);
-                    if(db_name[0] == 'second_day') {
-                        if(time[0].count <= 3) {
-                            let query3 = db.query(`INSERT INTO ${db_name[0]} (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 1 day)`, (err, result) => {
-                                if(err) throw err;
-                                console.log('INSERTED TO second_day');
-                            });
-                        }
-                        else {
-                            db_name[0] = 'third_day';
-                        }                        
-                    }
 
-                    if(db_name[0] == 'third_day') {
-                        if(time[0].count <= 3) {
-                            let query3 = db.query(`INSERT INTO ${db_name[0]} (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 2 day)`, (err, result) => {
-                                if(err) throw err;
-                                console.log('INSERTED TO third_day');
-                            });
-                        } 
-                        else {
-                            db_name[0] = 'Appointment Full!!!';
-                        }                        
-                    }
-                    console.log(db_name);
+                        console.log(`COUNT - ${cnt}`);
+
+                        if(cnt[0] == 3) {
+                            db_name[0] = 'Appointment is FULL!!!';
+                        }
+                        // console.log(time[0]);
+                    if(db_name[0] == 'first_day'){
+                        var rowCount1 = [];
+                        var rowCountResult1;
+                        let queryRowCount = db.query('SELECT COUNT(*) FROM first_day', (err, result) => {
+                            rowCountResult1 = result[0];
+                            for(var i in rowCountResult1) {
+                                rowCount1.push(rowCountResult1[i]);
+                            }
+                            // console.log(rowCount);   returns count of first_day
+                            console.log(rowCount1[0]);
+                            if(rowCount1[0] < 3) {
+                                let query2 = db.query(`INSERT INTO ${db_name[0]} (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE())`, (err, result) => {
+                                    if(err) throw err;
+                                    console.log('INSERTED TO first_day');
+                                });
+                            }
+                            else {
+                                db_name[0] = 'second_day';
+                            }
+                            
+                            if(db_name[0] == 'second_day') {
+                                var rowCount2 = [];
+                                var rowCountResult2;
+                                let queryRowCount = db.query('SELECT COUNT(*) FROM second_day', (err, result) => {
+                                    rowCountResult2 = result[0];
+                                    for(var i in rowCountResult2) {
+                                        rowCount2.push(rowCountResult2[i]);
+                                    }
+                                    if(rowCount2[0] < 3) {
+                                        let query3 = db.query(`INSERT INTO ${db_name[0]} (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 1 day)`, (err, result) => {
+                                            if(err) throw err;
+                                            console.log('INSERTED TO second_day');
+                                        });
+                                    }
+                                    else {
+                                        db_name[0] = 'third_day';
+                                    }   
+                                    if(db_name[0] == 'third_day') {
+                                        var rowCount = [];
+                                        var rowCountResult;
+                                        let queryRowCount = db.query('SELECT COUNT(*) FROM third_day', (err, result) => {
+                                            rowCountResult = result[0];
+                                            for(var i in rowCountResult) {
+                                                rowCount.push(rowCountResult[i]);
+                                            }
+                                        if(rowCount[0] < 3) {
+                                            let query3 = db.query(`INSERT INTO ${db_name[0]} (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 2 day)`, (err, result) => {
+                                                if(err) throw err;
+                                                console.log('INSERTED TO third_day');
+                                            });
+                                        } 
+                                        else {
+                                            db_name[0] = 'Appointment Full!!!';
+                                        }   
+                                });               
+                            }
+                            });                      
+                            }
+                        });
+                    }                    console.log(db_name);
+
+                    })
+                    
                 });
         });
 
