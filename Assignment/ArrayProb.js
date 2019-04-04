@@ -11,6 +11,6 @@ function ArrayProb(arr, k) {
     return ans;
 }
 
-var arr = [1,2,3,4,5];
+var arr = [24,89];
 var k = 2;
 console.log(ArrayProb(arr, k));
