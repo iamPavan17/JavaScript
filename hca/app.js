@@ -96,6 +96,24 @@ app.post('/patient', (req, res) => {
                 p_phone: data.phone
             };
 
+            var dbName = [];
+            let CountQuery3 = db.query('SELECT COUNT(*) FROM third_day', (err, result) => {
+                var cnt3 = [];
+                var cntrs3 = result[0];
+                for(var i in cntrs3) {
+                    cnt3.push(cntrs3[i]);
+                }
+                
+                if(cnt3[0] == 3) {
+                    dbName[0] = 'Appointment is FULL!!!'
+                }
+                if(dbName[0] == 'Appointment is FULL!!!') {
+                    res.send(`
+                        <h2>Appointment is FULL!!</h2>
+                    `);
+                }
+            });
+
             console.log(appData);
                 let query1 = db.query('SELECT HOUR(CURTIME())', (err, result) => {
                     var time1 = '11';
@@ -125,12 +143,21 @@ app.post('/patient', (req, res) => {
                         for(var i in cntrs) {
                             cnt.push(cntrs[i]);
                         }
-
-                        console.log(`COUNT - ${cnt}`);
-
                         if(cnt[0] == 3) {
-                            db_name[0] = 'Appointment is FULL!!!';
+                            db_name[0] = 'second_day';
                         }
+
+                        let CountQuery2 = db.query('SELECT COUNT(*) FROM second_day', (err, result) => {
+                            var cnt2 = [];
+                            var cntrs2 = result[0];
+                            for(var i in cntrs2) {
+                                cnt2.push(cntrs2[i]);
+                            }
+                            // console.log(cnt2[0]);
+                            if(cnt2[0] == 3) {
+                                db_name = 'third_day';
+                            }
+
                         // console.log(time[0]);
                     if(db_name[0] == 'first_day'){
                         var rowCount1 = [];
@@ -151,7 +178,8 @@ app.post('/patient', (req, res) => {
                             else {
                                 db_name[0] = 'second_day';
                             }
-                            
+                        });
+                    }      
                             if(db_name[0] == 'second_day') {
                                 var rowCount2 = [];
                                 var rowCountResult2;
@@ -168,17 +196,23 @@ app.post('/patient', (req, res) => {
                                     }
                                     else {
                                         db_name[0] = 'third_day';
-                                    }   
-                                    if(db_name[0] == 'third_day') {
+                                    }   });    
+                                    
+                                    
+                                }
+                                // console.log(`DB_NAME - ${db_name}`);
+
+                                    if(cnt2[0] == 3) {
                                         var rowCount = [];
                                         var rowCountResult;
+                                        // console.log('inside loop');
                                         let queryRowCount = db.query('SELECT COUNT(*) FROM third_day', (err, result) => {
                                             rowCountResult = result[0];
                                             for(var i in rowCountResult) {
                                                 rowCount.push(rowCountResult[i]);
                                             }
                                         if(rowCount[0] < 3) {
-                                            let query3 = db.query(`INSERT INTO ${db_name[0]} (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 2 day)`, (err, result) => {
+                                            let query3 = db.query(`INSERT INTO third_day (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE() + INTERVAL 2 day)`, (err, result) => {
                                                 if(err) throw err;
                                                 console.log('INSERTED TO third_day');
                                             });
@@ -188,17 +222,11 @@ app.post('/patient', (req, res) => {
                                         }   
                                 });               
                             }
-                            });                      
-                            }
-                        });
-                    }                    console.log(db_name);
 
-                    })
-                    
+                        console.log(db_name);
+                    })     });
                 });
         });
-
-        
     }
     else {
         res.render('display_error', {display: 'Please enter all the details!!'});
