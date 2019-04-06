@@ -21,12 +21,7 @@ app.use(bodyParser.json());
 
 //home
 app.get('/', (req, res) => {
-    res.render('patient-app-home');
-});
-
-//Patient request
-app.post('/patient', (req, res) => {
-
+    
     let deleteQuery1 = db.query('DELETE FROM first_day WHERE date < CURDATE()', (err, result) => {
         console.log('First_day Refreshed!!!');
     });
@@ -36,7 +31,11 @@ app.post('/patient', (req, res) => {
     let deleteQuery3 = db.query('DELETE FROM third_day WHERE date < CURDATE()', (err, result) => {
         console.log('Third_day Refreshed!!!');
     });
+    res.render('patient-app-home');
+});
 
+//Patient request
+app.post('/patient', (req, res) => {
     var hca = [
         {
             doctor: 'Rama',
@@ -107,11 +106,11 @@ app.post('/patient', (req, res) => {
                 if(cnt3[0] == 3) {
                     dbName[0] = 'Appointment is FULL!!!'
                 }
-                if(dbName[0] == 'Appointment is FULL!!!') {
-                    res.send(`
-                        <h2>Appointment is FULL!!</h2>
-                    `);
-                }
+                // if(dbName[0] == 'Appointment is FULL!!!') {
+                //     res.send(`
+                //         <h2>Appointment is FULL!!</h2>
+                //     `);
+                // }
             });
 
             console.log(appData);
@@ -137,7 +136,7 @@ app.post('/patient', (req, res) => {
                     var db_name = [];
                     db_name[0] = 'first_day';
 
-                    let CountQuery = db.query('SELECT COUNT(*) FROM first_day', (err, result) => {
+                    let CountQuery = db.query('SELECT id FROM first_day', (err, result) => {
                         var cnt = [];
                         var cntrs = result[0];
                         for(var i in cntrs) {
@@ -147,7 +146,7 @@ app.post('/patient', (req, res) => {
                             db_name[0] = 'second_day';
                         }
 
-                        let CountQuery2 = db.query('SELECT COUNT(*) FROM second_day', (err, result) => {
+                        let CountQuery2 = db.query('SELECT id FROM second_day', (err, result) => {
                             var cnt2 = [];
                             var cntrs2 = result[0];
                             for(var i in cntrs2) {
@@ -158,6 +157,17 @@ app.post('/patient', (req, res) => {
                                 db_name = 'third_day';
                             }
 
+                        let CountQuery34 = db.query('SELECT id FROM third_day', (err, result) => {
+                            var cnt34 = [];
+                            var cntrs34 = result[0];
+                            for(var i in cntrs34) {
+                                cnt34.push(cntrs34[i]);
+                            }
+
+                            if(cnt34[0] == 3) {
+                                db_name = 'Appointment is FULL!!';
+                            }
+                            
                         // console.log(time[0]);
                     if(db_name[0] == 'first_day'){
                         var rowCount1 = [];
@@ -168,7 +178,7 @@ app.post('/patient', (req, res) => {
                                 rowCount1.push(rowCountResult1[i]);
                             }
                             // console.log(rowCount);   returns count of first_day
-                            console.log(rowCount1[0]);
+                            console.log('ROW' +rowCount1[0]);
                             if(rowCount1[0] < 3) {
                                 let query2 = db.query(`INSERT INTO ${db_name[0]} (id, d_id, p_name, p_email, p_phone, time, date) VALUES (${time[0].count}, ${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${time[0].t}, CURDATE())`, (err, result) => {
                                     if(err) throw err;
@@ -206,7 +216,7 @@ app.post('/patient', (req, res) => {
                                         var rowCount = [];
                                         var rowCountResult;
                                         // console.log('inside loop');
-                                        let queryRowCount = db.query('SELECT COUNT(*) FROM third_day', (err, result) => {
+                                        let queryRowCount = db.query('SELECT id FROM third_day', (err, result) => {
                                             rowCountResult = result[0];
                                             for(var i in rowCountResult) {
                                                 rowCount.push(rowCountResult[i]);
@@ -224,6 +234,8 @@ app.post('/patient', (req, res) => {
                             }
 
                         console.log(db_name);
+                        })
+
                     })     });
                 });
         });
