@@ -19,9 +19,63 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+//sending reminder message
+function remainderMessage(messageBody) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+    
+    req.query({
+      "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
+      "sender_id": "FSTSMS",
+      "message": `Dear ${messageBody.p_name}, You appointment is at ${messageBody.time}, ${messageBody.date}`,
+      "language": "english",
+      "route": "p",
+      "numbers": messageBody.p_phone,
+    });
+    
+    req.headers({
+      "cache-control": "no-cache"
+    });
+    
+  
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+    
+      console.log(res.body);
+    });
+}
+
+(function () {
+    let getTimeQuery = db.query('SELECT HOUR(CURTIME())', (err, result) => {
+        var currentTimeResult = result[0];
+        var hours = [];
+        for(var i in currentTimeResult) {
+            hours.push(currentTimeResult[i]);
+        }
+        // console.log(hours[0]);  //returns current time
+        if(hours[0] == 15) {
+            let firstTableQuery = db.query('SELECT * FROM first_day', (err, result) => {
+                result.forEach((d) => {
+                    remainderMessage(d);
+                })   
+            });
+            let secondTableQuery = db.query('SELECT * FROM second_day', (err, result) => {
+                result.forEach((d) => {
+                    remainderMessage(d);
+                })   
+            });
+            let thirdTableQuery = db.query('SELECT * FROM third_day', (err, result) => {
+                result.forEach((d) => {
+                    remainderMessage(d);
+                })   
+            });
+        }
+    });
+})();
+
 //home
 app.get('/', (req, res) => {
-
     let deleteQuery1 = db.query('DELETE FROM first_day WHERE date < CURDATE()', (err, result) => {
         console.log('First_day Refreshed!!!');
     });
@@ -35,6 +89,7 @@ app.get('/', (req, res) => {
     res.render('patient-home');
 });
 
+//messaging to patient
 function message(messageBody) {
     var unirest = require("unirest");
 
