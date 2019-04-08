@@ -9,6 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,7 +42,9 @@
     </nav>
 
     <div class="container pt-5">
-            <h3>List of Artists</h3><br>
+            <h3>List of Artists</h3>
+            <a href='/listaccartist'><i class="fas fa-sync"></i></a>
+            <br>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -48,7 +52,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Rewards</th>
-                        {{!-- <th scope="col">About</th> --}}
+                        <th scope="col">Last Login</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +62,7 @@
                             <td>{{this.username}}</td>
                             <td>{{this.email}}</td>
                             <td>{{this.rewards}}</td>
-                            {{!-- <td>{{this.status}}</td> --}}
+                            <td>{{this.last_login}}</td>
                         </tr>
                     {{/each}}
                 </tbody>
@@ -66,6 +70,52 @@
         </div>
 
         <br>
-        <div class="text-centre container" style="background-color:black; width: 180px; height: 1px;"></div>
+        <div class="text-centre container" style="background-color:black; width: 180px; height: 1px;"></div><br>
+
+        <div class="container pt-4">
+            <h3>Rewards</h3><br>
+            <form action="updatecredits" method="POST">
+                <div class="row">
+                <div class="form-group col-md-2">
+                {{!-- <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label> --}}
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="artistid">
+                    <option selected>Choose artist ID</option>
+                    {{#each display}}
+                        <option value={{this.id}}>{{this.id}}</option>
+                    {{/each}}
+                </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="text" class="form-control" id="inputZip" placeholder="Enter the credits" name="credits">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Update the Credits</button> {{msg}}
+            </form>
+        </div>
+
+        <br>
+        <div class="text-centre container" style="background-color:black; width: 180px; height: 0.5px;"></div><br>
+
+        <div class="container pt-4">
+            <h3>Remove of Artist</h3><br>
+            <form action="removeartist" method="POST">
+                <div class="row">
+                <div class="form-group col-md-2">
+                {{!-- <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label> --}}
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="artistid">
+                    <option selected>Choose artist ID</option>
+                    {{#each display}}
+                        <option value={{this.id}}>{{this.id}}</option>
+                    {{/each}}
+                </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Remove an Artist &nbsp;</button> {{msg1}}
+            </form>
+        </div>
+
+        <br><br>
+        <div class="text-centre container" style="background-color:black; width: 180px; height: 0.5px;"></div><br><br>
+        
 </body>
 </html>

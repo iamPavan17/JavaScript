@@ -67,6 +67,29 @@ app.get('/listaccartist', (req, res) => {
         if(err) throw err;
         res.render('admin_home_listaccartist', {display: result});
     });
+});
+
+app.post('/updatecredits', (req, res) => {
+    let data = {
+        artistId: req.body.artistid,
+        credits: req. body.credits
+    };
+    let sql = `UPDATE new_artist SET rewards = ${data.credits} WHERE id = ${data.artistId}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('admin_home_listaccartist', {msg: 'Credits has been updated!!!. Please click on the refresh icon to see the updated list of Artist.'});
+    });
+});
+
+app.post('/removeartist', (req, res) => {
+    let data = {
+        artistId: req.body.artistid
+    };
+    let sql = `DELETE FROM new_artist WHERE id = ${data.artistId}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('admin_home_listaccartist', {msg1: `Artist with the ID: ${data.artistId} has been removed, Please click on the refresh icon to see the updated list of Artist. `})
+    })
 })
 
 app.get('/inviteartist', (req, res) => {
