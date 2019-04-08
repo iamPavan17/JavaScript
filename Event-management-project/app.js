@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
                 <h3>This is HomePage </h3><br><br>
                 <a href='/adminlogin'>Admin Login</a><br><br>
                 <a href='/artist_registration'>Click here for Registration</a><br><br>
-                <a href='/login'>Click here for Login</a>
+                <a href='/artistlogin'>Click here for Login</a>
             </div>
         </body>
         </html>
@@ -44,6 +44,10 @@ app.get('/', (req, res) => {
 app.get('/adminlogin', (req, res) => {
     res.render('admin_login');
 });
+
+app.get('/artistlogin', (req, res) => {
+    res.render('artist_login');
+})
 
 app.get('/logout', (req, res) => {
     res.redirect('/');
@@ -67,6 +71,29 @@ app.get('/listaccartist', (req, res) => {
 
 app.get('/inviteartist', (req, res) => {
     res.render('admin_home');
+});
+
+app.post('/artistlogin', (req, res) => {
+    let data = {
+        username: req.body.username,
+        password: req.body.password
+    };
+
+    let sql = `SELECT COUNT(*) FROM new_artist WHERE username = '${data.username}' AND password = '${data.password}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        var countResult = result[0];
+        var count = [];
+        for(var i in countResult) {
+            count.push(countResult[i]);
+        }
+        if(count[0]) {
+            res.render('artist_home');
+        }
+        else {
+            res.send('Incorrect Username an/or Password!!');
+        }
+    })
 })
 
 app.post('/adminlogin', (req, res) => {
@@ -158,7 +185,7 @@ app.post('/artistreg', (req, res) => {
         if(count[0]) {
             let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
                 if(err) throw err;
-                let sql2 = `INSERT INTO new_artist (username, email, rewards, about) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!')`;
+                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, date, password) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', CURDATE(), '${data.password}')`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
                     res.redirect('/');
