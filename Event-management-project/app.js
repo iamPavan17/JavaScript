@@ -88,7 +88,11 @@ app.post('/artistlogin', (req, res) => {
             count.push(countResult[i]);
         }
         if(count[0]) {
-            res.render('artist_home');
+            let sql2 = `UPDATE new_artist SET last_login = NOW() WHERE username = '${data.username}' AND password = '${data.password}' `;
+            let query2 = db.query(sql2, (err, result) => {
+                if(err) throw err;
+                res.render('artist_home');
+            });
         }
         else {
             res.send('Incorrect Username an/or Password!!');
@@ -185,7 +189,7 @@ app.post('/artistreg', (req, res) => {
         if(count[0]) {
             let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
                 if(err) throw err;
-                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, date, password) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', CURDATE(), '${data.password}')`;
+                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}')`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
                     res.redirect('/');
