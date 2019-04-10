@@ -109,6 +109,15 @@
                     {{/each}}
                 </select>
                 </div>
+                <div class="form-group col-md-2">
+                {{!-- <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label> --}}
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="artistname">
+                    <option selected>Artist Name</option>
+                    {{#each display}}
+                        <option value={{this.username}}>{{this.username}}</option>
+                    {{/each}}
+                </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-outline-dark">Remove an Artist &nbsp;</button> {{msg1}}
             </form>

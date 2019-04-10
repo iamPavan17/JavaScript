@@ -83,14 +83,20 @@ app.post('/updatecredits', (req, res) => {
 
 app.post('/removeartist', (req, res) => {
     let data = {
-        artistId: req.body.artistid
+        artistId: req.body.artistid,
+        artistName: req.body.artistname
     };
-    let sql = `DELETE FROM new_artist WHERE id = ${data.artistId}`;
+    let sql = `DELETE FROM new_artist WHERE id = ${data.artistId} AND username = '${data.artistName}'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
-        res.render('admin_home_listaccartist', {msg1: `Artist with the ID: ${data.artistId} has been removed, Please click on the refresh icon to see the updated list of Artist. `})
-    })
-})
+        if(result['affectedRows']) {
+            res.render('admin_home_listaccartist', {msg1: `Artist with the ID: ${data.artistId} has been removed, Please click on the refresh icon to see the updated list of Artist. `})
+        }
+        else {
+            res.render('admin_home_listaccartist', {msg1: `Artist ID and Artist name, you have selected is not matching!!`});
+        }
+    });
+});
 
 app.get('/inviteartist', (req, res) => {
     res.render('admin_home');
