@@ -329,7 +329,7 @@ app.post('/patient', (req, res) => {
                         }
 
                         if(lastTime[0] == 15) {
-                            if(hours[0] < 11 && cnt2[0] == 0) {
+                            if(cnt2[0] == 0) {
                                 let t = 11;
                                 let firstInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
                                     if(err) throw err;
@@ -347,7 +347,7 @@ app.post('/patient', (req, res) => {
                                 res.render('display_doctor', {display: ab});
                             }
     
-                           else if(hours[0] < 11 && cnt2[0] == 1) {
+                           else if(cnt2[0] == 1) {
                                let t = 13;
                                 let secondInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
                                     if(err) throw err;
@@ -365,63 +365,9 @@ app.post('/patient', (req, res) => {
                                 res.render('display_doctor', {display: ab});
                             }
     
-                            else if(hours[0] < 11 && cnt2[0] == 2) {
+                            else if(cnt2[0] == 2) {
                                 let t = 15;
                                 let thirdInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
-                                    if(err) throw err;
-                                });
-                                messageBody = {
-                                    phone: appData.p_phone,
-                                    name: appData.p_name,
-                                    doctor: max.doctor,
-                                    time: `${t}:00`,
-                                    day: 'Tomorrow'
-                                };
-                                message(messageBody);
-                                ab[0]['t'] = `${t} - Tomorrow`;
-                                ab[0]['phone'] = appData.p_phone;
-                                res.render('display_doctor', {display: ab});
-                            }
-    
-                           else if(hours[0] < 13 && cnt2[0] == 0) {
-                               let t = 13;
-                                let fouthInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
-                                    if(err) throw err;
-                                });
-                                messageBody = {
-                                    phone: appData.p_phone,
-                                    name: appData.p_name,
-                                    doctor: max.doctor,
-                                    time: `${t}:00`,
-                                    day: 'Tomorrow'
-                                };
-                                message(messageBody);
-                                ab[0]['t'] = `${t} - Tomorrow`;
-                                ab[0]['phone'] = appData.p_phone;
-                                res.render('display_doctor', {display: ab});
-                            }
-    
-                           else if(hours[0] < 13 && cnt2[0] == 1) {
-                               let t = 15;
-                                let fiftInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
-                                    if(err) throw err;
-                                });
-                                messageBody = {
-                                    phone: appData.p_phone,
-                                    name: appData.p_name,
-                                    doctor: max.doctor,
-                                    time: `${t}:00`,
-                                    day: 'Tomorrow'
-                                };
-                                message(messageBody);
-                                ab[0]['t'] = `${t} - Tomorrow`;
-                                ab[0]['phone'] = appData.p_phone;
-                                res.render('display_doctor', {display: ab});
-                            }
-                            
-                           else if(hours[0] < 15 && cnt2[0] == 0) {
-                               let t = 15;
-                                let sixthInsert2 = db.query(`INSERT INTO second_day (d_id, p_name, p_email, p_phone, time, date) VALUES (${appData.d_id}, '${appData.p_name}', '${appData.p_email}', ${appData.p_phone}, ${t}, CURDATE() + INTERVAL 1 DAY)`, (err, result) => {
                                     if(err) throw err;
                                 });
                                 messageBody = {
