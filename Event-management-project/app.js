@@ -184,12 +184,23 @@ app.post('/inviteartist', (req, res) => {
         a_code: req.body.code,
         status: 'pending'
     };
-    let sql = 'INSERT INTO invite_artist SET ?';
-    let query = db.query(sql, data, (err, result) => {
+
+    let sql1 = 'SELECT uuid()';
+    let query1 = db.query(sql1, (err, result) => {
+        if(err) throw err;
+        var codeResult = result[0];
+        for(var i in codeResult) {
+            let filteredCode = codeResult[i].slice(0,7);
+            data['a_code'] = filteredCode;
+        }
+        // console.log(data)
+        let sql = 'INSERT INTO invite_artist SET ?';
+        let query = db.query(sql, data, (err, result) => {
         if(err) throw err;
         // message(data);
         // console.log(data);
         res.render('admin_home', {message: 'Invitation successfully sent!!!'});
+    });
     });
 });
 
