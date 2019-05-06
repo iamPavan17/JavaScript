@@ -3,8 +3,16 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mysql = require('mysql');
+const session = require('express-session');
+const fileUpload = require('express-fileupload');
 
 const app = express();
+
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -50,6 +58,7 @@ app.get('/artistlogin', (req, res) => {
 
 app.get('/logout', (req, res) => {
     res.redirect('/');
+    req.session.destroy();
 });
 
 app.get('/listartist', (req, res) => {
@@ -67,6 +76,10 @@ app.get('/listaccartist', (req, res) => {
         res.render('admin_home_listaccartist', {display: result});
     });
 });
+
+app.get('/artist_home_performance', (req, res) => {
+    res.render('')
+}); 
 
 app.post('/updatecredits', (req, res) => {
     let data = {
@@ -101,6 +114,28 @@ app.get('/inviteartist', (req, res) => {
     res.render('admin_home');
 });
 
+app.get('/artist_update_about', (req, res) => {
+    // console.log(req.session.username)
+    res.render('artist_update_about');
+});
+
+app.post('/artist_about_update', (req, res) => {
+    let data = {
+        about: req.body.about
+    };
+
+    let sql = `UPDATE new_artist SET about = '${data.about}' WHERE username = '${req.session.username}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            // result['user'] = req.session.username;
+            res.render('artist_home', {display: result});
+        });
+    });
+}); 
+
 app.post('/artistlogin', (req, res) => {
     let data = {
         username: req.body.username,
@@ -119,7 +154,14 @@ app.post('/artistlogin', (req, res) => {
             let sql2 = `UPDATE new_artist SET last_login = NOW() WHERE username = '${data.username}' AND password = '${data.password}' `;
             let query2 = db.query(sql2, (err, result) => {
                 if(err) throw err;
-                res.render('artist_home');
+                req.session.loggedin = true;
+                req.session.username = data.username;
+
+                let query3 = db.query(`SELECT * FROM new_artist WHERE username = '${data.username}' AND password = '${data.password}'`, (err, result) => {
+                    if(err) throw err;
+                    // result['user'] = req.session.username;
+                    res.render('artist_home', {display: result});
+                });
             });
         }
         else {
@@ -198,7 +240,7 @@ app.post('/inviteartist', (req, res) => {
         let query = db.query(sql, data, (err, result) => {
         if(err) throw err;
         // message(data);
-        // console.log(data);
+        // console.log(datalog);
         res.render('admin_home', {message: 'Invitation successfully sent!!!'});
     });
     });
