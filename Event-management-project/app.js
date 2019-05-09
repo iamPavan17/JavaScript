@@ -116,8 +116,9 @@ app.get('/artist_update_about', (req, res) => {
 });
 
 app.get('/artist_home_performance', (req, res) => {
-    let query = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
+    let query = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
+        result['username'] = req.session.username;
         res.render('artist_home_performance', {display: result});
     })
 });
@@ -141,12 +142,35 @@ app.post('/artist_performance_insert', (req, res) => {
     let sql = 'INSERT INTO artist_performance_list SET ?';
     let query = db.query(sql, data, (err, result) => {
         if(err) throw err;
-        let query2 = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
+        let query2 = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
             if(err) throw err;
+            result['username'] = req.session.username;
             res.render('artist_home_performance', {display: result});
         })
     })
 });
+
+app.get('/artist_home_schedule', (req, res) => {
+    let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        res.render('artist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
+    })
+})
+
+app.post('/artist_home_schedule', (req, res) => {
+    var data = {
+        date: req.body.date,
+        title: req.body.title,
+        link: req.body.link,
+        artist_name: req.session.username
+    }
+    let sql = 'INSERT INTO artist_schedule SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
+            res.render('artist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
+        })
+    })
+})
 
 
 app.post('/artist_about_update', (req, res) => {
