@@ -21,10 +21,10 @@
 
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/artist_home">Bio </a>
           </li>
-          <li class="nav-item pl-2">
+          <li class="nav-item active">
             <a class="nav-link" href="#">Performance list <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
@@ -40,6 +40,37 @@
       </div>
     </nav>
 
+    <form method="POST" action="artist_performance_insert">
+      EventName: <input type="text" name="event_name"><br>
+      Place: <input type="text" name="place" id=""><br>
+      date: <input type="date" name="date"><br>
+      image: <input type="text" value="null" name="image"><br>
+      <input type="submit" value="Submit">
+    </form>
+
+        <div class="container pt-5">
+            <h3>List of Artists</h3><br>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Place</th>
+                        <th scope="col">Date</th>
+                        {{!-- <th scope="col">Status</th> --}}
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.event_name}}</td>
+                            <td>{{this.place}}</td>
+                            <td>{{this.date}}</td>
+                            {{!-- <td>{{this.status}}</td> --}}
+                        </tr>
+                </tbody>
+            </table>
+        </div>
     {{/each}}
 </body>
 </html>
