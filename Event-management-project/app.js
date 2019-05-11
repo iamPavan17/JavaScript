@@ -77,6 +77,31 @@ app.get('/listaccartist', (req, res) => {
     });
 });
 
+app.get('/artist_home_training', (req, res) => {
+    let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${req.session.username   }'`, (err, result) => {
+        if(err) throw err;
+        res.render('artist_home_training', {display: result});
+    })
+});
+
+app.post('/artist_home_training', (req, res) => {
+    let data = {
+        timings: req.body.timings,
+        address: req.body.address,
+        batches: req.body.batches,
+        contact: req.body.contact,
+        username: req.session.username
+    };
+    let sql = 'INSERT INTO artist_training SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${data.username}'`, (err, result) => {
+            if(err) throw err;
+            res.render('artist_home_training', {display: result});
+        })
+    });
+});
+
 app.post('/updatecredits', (req, res) => {
     let data = {
         artistId: req.body.artistid,
@@ -153,8 +178,8 @@ app.post('/artist_performance_insert', (req, res) => {
 app.get('/artist_home_schedule', (req, res) => {
     let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
         res.render('artist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
-    })
-})
+    });
+});
 
 app.post('/artist_home_schedule', (req, res) => {
     var data = {
@@ -213,7 +238,7 @@ app.post('/artistlogin', (req, res) => {
 
                 let query3 = db.query(`SELECT * FROM new_artist WHERE username = '${data.username}' AND password = '${data.password}'`, (err, result) => {
                     if(err) throw err;
-                    // result['user'] = req.session.username;
+                    result['user'] = req.session.username;
                     res.render('artist_home', {display: result});
                 });
             });
@@ -222,7 +247,7 @@ app.post('/artistlogin', (req, res) => {
             res.send('Incorrect Username an/or Password!!');
         }
     })
-})
+});
 
 app.post('/adminlogin', (req, res) => {
     let data = {
