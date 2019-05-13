@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Artist Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container p-5">
+        <h1 class="text-center">Artist Registration Form</h1><br>
+        <form class='container pt-4'action="norartistreg" method="POST">
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="exampleInputEmail1">Username</label>
+                    <input type="text" name="username" placeholder="Username" class="form-control" id="exampleInputEmail1" required>
+                </div>
+                <div class="form-group col-6">
+                    <label for="exampleInputPassword">Password</label>
+                    <input type="password" name="password" placeholder="Password" class="form-control" id="exampleInputPassword" required>
+                </div>
+                <div class="form-group col-6">
+                    <label for="exampleInputCOde">Code</label>
+                    <input type="text" name="code" placeholder="Code" class="form-control" id="exampleInputCOde" required>
+                </div>
+                <div class="form-group col-6">
+                    <label for="exampleInputCsOde">Email</label>
+                    <input type="email" name="email" placeholder="Email" class="form-control" id="exampleInputCsOde" required>
+                </div>
+                <div class="form-group col-6">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Singer" name="s">
+                        <label class="form-check-label" for="inlineCheckbox1">Singer</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Dancer" name="d">
+                        <label class="form-check-label" for="inlineCheckbox2">Dancer</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Musician" name="m">
+                        <label class="form-check-label" for="inlineCheckbox3">Musician</label>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <input type="submit" class="btn btn-outline-primary" class="col-6">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
