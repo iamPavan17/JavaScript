@@ -39,13 +39,16 @@ app.get('/', (req, res) => {
             <div class='text-center container pt-5'>
                 <h3>This is HomePage </h3><br><br>
                 <a href='/adminlogin'>Admin Login</a><br><br>
-                <a href='/artist_registration'>Click here for Registration</a><br><br>
-                <a href='/artistlogin'>Click here for Login</a>
+                <a href='/artist_registration'>Click here for Registration (Super User)</a><br><br>
+                <a href='/artistlogin'>Click here for Login (Super User)</a><br><br>
+                <a href='/norartist_registration'>Click here for Registration (Artist)</a><br><br>
+                <a href='/norartistlogin'>Click here for Login (Artist)</a>
             </div>
         </body>
         </html>
     `);
 });
+
 
 //redirects to admin login
 app.get('/adminlogin', (req, res) => {
@@ -54,6 +57,10 @@ app.get('/adminlogin', (req, res) => {
 
 app.get('/artistlogin', (req, res) => {
     res.render('artist_login');
+});
+
+app.get('/norartistlogin', (req, res) => {
+    res.render('norartist_login');
 })
 
 app.get('/logout', (req, res) => {
@@ -130,6 +137,10 @@ app.post('/removeartist', (req, res) => {
         }
     });
 });
+
+app.get('/artist_home_invite_user', (req, res) => {
+    res.render('artist_home_invite_user');
+})
 
 app.get('/inviteartist', (req, res) => {
     res.render('admin_home');
@@ -214,6 +225,42 @@ app.post('/artist_about_update', (req, res) => {
         });
     });
 }); 
+
+
+app.post('/norartistlogin', (req, res) => {
+    let data = {
+        username: req.body.username,
+        password: req.body.password
+    };
+
+    let sql = `SELECT COUNT(*) FROM new_artist2 WHERE username = '${data.username}' AND password = '${data.password}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        var countResult = result[0];
+        var count = [];
+        for(var i in countResult) {
+            count.push(countResult[i]);
+        }
+        if(count[0]) {
+            let sql2 = `UPDATE new_artist2 SET last_login = NOW() WHERE username = '${data.username}' AND password = '${data.password}' `;
+            let query2 = db.query(sql2, (err, result) => {
+                if(err) throw err;
+                req.session.loggedin = true;
+                req.session.username = data.username;
+
+                let query3 = db.query(`SELECT * FROM new_artist2 WHERE username = '${data.username}' AND password = '${data.password}'`, (err, result) => {
+                    if(err) throw err;
+                    result['user'] = data.username;
+                    res.render('norartist_home', {display: result});
+                });
+            });
+        }
+        else {
+            res.send('Incorrect Username an/or Password!!');
+        }
+    })
+});
+
 
 app.post('/artistlogin', (req, res) => {
     let data = {
@@ -326,9 +373,83 @@ app.post('/inviteartist', (req, res) => {
 });
 
 
+app.post('/inviteartist2', (req, res) => {
+    let data = {
+        a_name: req.body.name,
+        a_email: req.body.email,
+        a_phone: req.body.phone,
+        a_code: req.body.code,
+        status: 'pending'
+    };
+
+    let sql1 = 'SELECT uuid()';
+    let query1 = db.query(sql1, (err, result) => {
+        if(err) throw err;
+        var codeResult = result[0];
+        for(var i in codeResult) {
+            let filteredCode = codeResult[i].slice(0,7);
+            data['a_code'] = filteredCode;
+        }
+        // console.log(data)
+        let sql = 'INSERT INTO invite_artist2 SET ?';
+        let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        // message(data);
+        // console.log(datalog);
+        res.render('artist_home_invite_user', {message: 'Invitation successfully sent!!!'});
+    });
+    });
+});
+
+
 //artist registration
 app.get('/artist_registration', (req, res) => {
     res.render('artist_registration');
+});
+
+app.get('/norartist_registration', (req, res) => {
+    res.render('norartist_registration');
+});
+
+app.post('/norartistreg', (req, res) => {
+    let data = {
+        username: req.body.username,
+        password: req.body.password,
+        code: req.body.code,
+        email: req.body.email,
+        singer: req.body.s,
+        dancer: req.body.d,
+        musician: req.body.m,
+        badge: 'none'
+    };
+
+    if(data.singer && data.dancer && data.musician) {
+        data.badge = 'all rounder';
+    }
+    console.log(data.badge);
+    // console.log(data);
+    let sql = `SELECT COUNT(*) FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        var countResult = result[0];
+        var count = [];
+        for(var i in countResult) {
+            count.push(countResult[i]);
+        }
+        if(count[0]) {
+            let query1 = db.query(`UPDATE invite_artist2 SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                if(err) throw err;
+                let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}')`;
+                let query2 = db.query(sql2, (err, result) => {
+                    if(err) throw err;
+                    res.redirect('/');
+                });
+            });
+        }
+        else {
+            res.send('Incorrect Code an/or Email!!');
+        }
+    })
 });
 
 app.post('/artistreg', (req, res) => {
