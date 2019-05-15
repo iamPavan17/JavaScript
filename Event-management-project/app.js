@@ -84,10 +84,25 @@ app.get('/listaccartist', (req, res) => {
     });
 });
 
+app.get('/artist_home_list_artist', (req, res ) => {
+    let sql = 'SELECT * FROM invite_artist2';
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('artist_home_list_artist', {display: result});
+    });
+});
+
 app.get('/artist_home_training', (req, res) => {
     let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${req.session.username   }'`, (err, result) => {
         if(err) throw err;
         res.render('artist_home_training', {display: result});
+    })
+});
+
+app.get('/norartist_home_training', (req, res) => {
+    let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${req.session.username   }'`, (err, result) => {
+        if(err) throw err;
+        res.render('norartist_home_training', {display: result});
     })
 });
 
@@ -109,12 +124,30 @@ app.post('/artist_home_training', (req, res) => {
     });
 });
 
+app.post('/norartist_home_training', (req, res) => {
+    let data = {
+        timings: req.body.timings,
+        address: req.body.address,
+        batches: req.body.batches,
+        contact: req.body.contact,
+        username: req.session.username
+    };
+    let sql = 'INSERT INTO artist_training SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${data.username}'`, (err, result) => {
+            if(err) throw err;
+            res.render('norartist_home_training', {display: result});
+        })
+    });
+});
+
 app.post('/updatecredits', (req, res) => {
     let data = {
         artistId: req.body.artistid,
         credits: req. body.credits
     };
-    let sql = `UPDATE new_artist SET rewards = ${data.credits} WHERE id = ${data.artistId}`;
+    let sql = `UPDATE new_artist SET rewards = rewards + ${data.credits} WHERE id = ${data.artistId}`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         res.render('admin_home_listaccartist', {msg: 'Credits has been updated!!!. Please click on the refresh icon to see the updated list of Artist.'});
@@ -159,6 +192,14 @@ app.get('/artist_home_performance', (req, res) => {
     })
 });
 
+app.get('/norartist_home_performance', (req, res) => {
+    let query = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        result['username'] = req.session.username;
+        res.render('artist_home_performance', {display: result});
+    })
+});
+
 app.get('/artist_home', (req, res) => {
     let query = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
@@ -186,11 +227,65 @@ app.post('/artist_performance_insert', (req, res) => {
     })
 });
 
+app.post('/norartist_performance_insert', (req, res) => {
+    let data = {
+        event_name: req.body.event_name,
+        place: req.body.place,
+        date: req.body.date,
+        image_loc: req.body.image,
+        artist_name: req.session.username
+    }
+    // console.log(req.session.username)
+    let sql = 'INSERT INTO artist_performance_list SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            result['username'] = req.session.username;
+            res.render('artist_home_performance', {display: result});
+        })
+    })
+});
+
+app.get('/artist_home_reset_password', (req, res) => {
+    res.render('artist_home_reset_password');
+});
+
+app.post('/artist_home_reset_password', (req, res) => {
+    let data = {
+        current: req.body.pass1,
+        new: req.body.pass2
+    };
+
+    if(data.current === data.new) {
+        let sql = `UPDATE new_artist SET password = '${data.new}' WHERE username = '${req.session.username}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            let query2 = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
+                if(err) throw err;
+                // result['user'] = req.session.username;
+                res.render('artist_home', {display: result});
+            });
+        });
+    }
+    else {
+        res.render('artist_home_reset_password', {msg: 'Password mismatch!!!'})
+    }
+})
+
 app.get('/artist_home_schedule', (req, res) => {
+    // let query = db.query()
     let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
         res.render('artist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
     });
 });
+
+app.get('/norartist_home_schedule', (req, res) => {
+    let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        res.render('norartist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
+    });
+});
+
 
 app.post('/artist_home_schedule', (req, res) => {
     var data = {
@@ -206,8 +301,23 @@ app.post('/artist_home_schedule', (req, res) => {
             res.render('artist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
         })
     })
-})
+});
 
+app.post('/norartist_home_schedule', (req, res) => {
+    var data = {
+        date: req.body.date,
+        title: req.body.title,
+        link: req.body.link,
+        artist_name: req.session.username
+    }
+    let sql = 'INSERT INTO artist_schedule SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT day(date) day, month(date) month, year(date) year, title, link, artist_name FROM artist_schedule WHERE artist_name = '${req.session.username}'`, (err, result) => {
+            res.render('norartist_home_schedule', {display: encodeURIComponent(JSON.stringify(result))});
+        })
+    })
+});
 
 app.post('/artist_about_update', (req, res) => {
     let data = {
@@ -226,6 +336,22 @@ app.post('/artist_about_update', (req, res) => {
     });
 }); 
 
+app.post('/norartist_about_update', (req, res) => {
+    let data = {
+        about: req.body.about
+    };
+
+    let sql = `UPDATE new_artist2 SET about = '${data.about}' WHERE username = '${req.session.username}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let query2 = db.query(`SELECT * FROM new_artist2 WHERE username = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            // result['user'] = req.session.username;
+            res.render('norartist_home', {display: result});
+        });
+    });
+});
 
 app.post('/norartistlogin', (req, res) => {
     let data = {
@@ -365,7 +491,7 @@ app.post('/inviteartist', (req, res) => {
         let sql = 'INSERT INTO invite_artist SET ?';
         let query = db.query(sql, data, (err, result) => {
         if(err) throw err;
-        // message(data);
+        message(data);
         // console.log(datalog);
         res.render('admin_home', {message: 'Invitation successfully sent!!!'});
     });
