@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CountUpandDown</title>
+</head>
+<body>
+    <input type="text" id="input" value="100">
+    <button id="up">+</button>
+    <button id="down">-</button>
+</body>
+
+<script>
+    inputHandler = document.getElementById('input');
+    upHandler = document.getElementById('up');
+    downHandler = document.getElementById('down');
+
+    upHandler.addEventListener('click', () => {
+        // console.log('Up');
+        let num = Number(inputHandler.value);
+        inputHandler.value = num + 100;
+    });
+
+    downHandler.addEventListener('click', () => {
+        // console.log('Up');
+        let num = Number(inputHandler.value);
+        inputHandler.value -= 100;
+    });
+</script>
+</html>
