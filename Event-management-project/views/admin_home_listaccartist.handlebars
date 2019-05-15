@@ -44,8 +44,9 @@
     <div class="container pt-5">
             <h3>List of Artists</h3>
             <a href='/listaccartist'><i class="fas fa-sync"></i></a>
-            <br>
-            <table class="table">
+            <br><br>
+                <input type="text" id="myInput" class="form-control col-3 pb-2" onkeyup="myFunction()" placeholder="Search for names..">
+            <table class="table" id="myTable">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">ID</th>
@@ -86,7 +87,11 @@
                 </select>
                 </div>
                 <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="inputZip" placeholder="Enter the credits" name="credits">
+                    <input type="text" class="form-control" id="inputZip" placeholder="Enter the credits" name="credits" value="0">
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="button" id="add" class="btn btn-primary">+</button>
+                    <button type="button" id="sub" class="btn btn-primary">-</button>
                 </div>
             </div>
             <button type="submit" class="btn btn-outline-dark">Update the Credits</button> {{msg}}
@@ -101,7 +106,6 @@
             <form action="removeartist" method="POST">
                 <div class="row">
                 <div class="form-group col-md-2">
-                {{!-- <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label> --}}
                 <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="artistid">
                     <option selected>Choose artist ID</option>
                     {{#each display}}
@@ -110,7 +114,6 @@
                 </select>
                 </div>
                 <div class="form-group col-md-2">
-                {{!-- <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label> --}}
                 <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="artistname">
                     <option selected>Artist Name</option>
                     {{#each display}}
@@ -125,6 +128,45 @@
 
         <br><br>
         <div class="text-centre container" style="background-color:black; width: 180px; height: 0.5px;"></div><br><br>
-        
+        <script>
+            function myFunction() {
+            // Declare variables 
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+                } 
+            }
+            }
+        </script>
+
+        <script>
+            var inputZipHandler = document.getElementById('inputZip');
+            var addHandler = document.getElementById('add');
+            var subHandler = document.getElementById('sub');
+
+            addHandler.addEventListener('click', () => {
+                let num = Number(inputZipHandler.value);
+                inputZipHandler.value = num + 100;
+            });
+
+            subHandler.addEventListener('click', () => {
+                let num = Number(inputZipHandler.value);
+                inputZipHandler.value = num - 100;
+            });
+
+        </script>
 </body>
 </html>
