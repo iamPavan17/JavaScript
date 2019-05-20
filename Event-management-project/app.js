@@ -42,13 +42,18 @@ app.get('/', (req, res) => {
                 <a href='/artist_registration'>Click here for Registration (Super User)</a><br><br>
                 <a href='/artistlogin'>Click here for Login (Super User)</a><br><br>
                 <a href='/norartist_registration'>Click here for Registration (Artist)</a><br><br>
-                <a href='/norartistlogin'>Click here for Login (Artist)</a>
+                <a href='/norartistlogin'>Click here for Login (Artist)</a><br><br>
+                <a href='/user_registration'>Click here for Registration (General User)</a><br><br>
+                <a href='/userlogin'>Click here for Login (General User)</a>
             </div>
         </body>
         </html>
     `);
 });
 
+app.get('/user_registration', (req, res) => {
+    res.render('users_registration');
+});
 
 //redirects to admin login
 app.get('/adminlogin', (req, res) => {
@@ -105,6 +110,20 @@ app.get('/norartist_home_training', (req, res) => {
         res.render('norartist_home_training', {display: result});
     })
 });
+
+app.post('/userreg', (req, res) => {
+    let data = {
+        name: req.body.username,
+        password: req.body.password,
+        email: req.body.email
+    };
+    let sql = 'INSERT INTO users SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        res.redirect('/');
+    });
+});
+
 
 app.post('/artist_home_training', (req, res) => {
     let data = {
@@ -251,6 +270,29 @@ app.get('/artist_home_reset_password', (req, res) => {
     res.render('artist_home_reset_password');
 });
 
+app.get('/artist_forgot_password', (req, res) => {
+    res.render('artist_forgot_password');
+});
+
+app.post('/artist_forgot_password', (req, res) => {
+    let data = {
+        email: req.body.email,
+        current: req.body.pass1,
+        new: req.body.pass2
+    };
+
+    if(data.current === data.new) {
+        let sql = `UPDATE new_artist SET password = '${data.new}' WHERE email = '${data.email}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            res.redirect('/');
+        });
+    }
+    else {
+        res.render('artist_home_reset_password', {msg: 'Password mismatch!!!'})
+    }
+});
+
 app.post('/artist_home_reset_password', (req, res) => {
     let data = {
         current: req.body.pass1,
@@ -271,7 +313,7 @@ app.post('/artist_home_reset_password', (req, res) => {
     else {
         res.render('artist_home_reset_password', {msg: 'Password mismatch!!!'})
     }
-})
+});
 
 app.get('/artist_home_schedule', (req, res) => {
     // let query = db.query()
@@ -421,6 +463,55 @@ app.post('/artistlogin', (req, res) => {
         }
     })
 });
+
+app.get('/userlogin', (req, res) => {
+    res.render('users_login');
+});
+
+app.get('/users_home_artist', (req, res) => {
+    let sql = 'SELECT * FROM new_artist';
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        result['username'] = req.session.username;        
+        res.render('users_home_artist', {display: result});
+    });
+});
+
+app.get('/users_home', (req, res) => {
+    let query = db.query(`SELECT * FROM users WHERE name = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        result['username'] = req.session.username;        
+        res.render('users_home', {display: result});
+    });
+});
+
+app.post('/userlogin', (req, res) => {
+    let data = {
+        name: req.body.username,
+        password: req.body.password
+    };
+    let sql = `SELECT COUNT(*) FROM users WHERE name = '${data.name}' AND password = '${data.password}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        var countResult = result[0];
+        var count = [];
+        for(var i in countResult) {
+            count.push(countResult[i]);
+        }
+        req.session.loggedin = true;
+        req.session.username = data.name;
+        // console.log(result);
+        result['username'] = req.session.username;
+        if(count[0]) {
+            res.render('users_home', {display: result});
+        }
+        else {
+            res.send('Incorrect Username and/or Password!!!');
+        }
+    })
+})
 
 app.post('/adminlogin', (req, res) => {
     let data = {
