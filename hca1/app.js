@@ -41,11 +41,11 @@ function remainderMessage(messageBody) {
   
     req.end(function (res) {
       if (res.error) throw new Error(res.error);
-    
       console.log(res.body);
     });
 }
 
+//Remainder message
 (function () {
     let getTimeQuery = db.query('SELECT HOUR(CURTIME())', (err, result) => {
         var currentTimeResult = result[0];
@@ -54,7 +54,7 @@ function remainderMessage(messageBody) {
             hours.push(currentTimeResult[i]);
         }
         // console.log(hours[0]);  //returns current time
-        if(hours[0] == 15) {
+        if(hours[0] == 1) {
             let firstTableQuery = db.query('SELECT * FROM first_day', (err, result) => {
                 result.forEach((d) => {
                     remainderMessage(d);
@@ -73,21 +73,6 @@ function remainderMessage(messageBody) {
         }
     });
 })();
-
-//home
-app.get('/', (req, res) => {
-    let deleteQuery1 = db.query('DELETE FROM first_day WHERE date < CURDATE()', (err, result) => {
-        console.log('First_day Refreshed!!!');
-    });
-    let deleteQuery2 = db.query('DELETE FROM second_day WHERE date < CURDATE()', (err, result) => {
-        console.log('Second_day Refreshed!!!');
-    });
-    let deleteQuery3 = db.query('DELETE FROM third_day WHERE date < CURDATE()', (err, result) => {
-        console.log('Third_day Refreshed!!!');
-    });
-
-    res.render('patient-home');
-});
 
 //messaging to patient
 function message(messageBody) {
@@ -115,6 +100,73 @@ function message(messageBody) {
     console.log(res.body);
     });
 }
+
+//home
+app.get('/', (req, res) => {
+    let deleteQuery1 = db.query('DELETE FROM first_day WHERE date < CURDATE()', (err, result) => {
+        console.log('First_day Refreshed!!!');
+    });
+    let deleteQuery2 = db.query('DELETE FROM second_day WHERE date < CURDATE()', (err, result) => {
+        console.log('Second_day Refreshed!!!');
+    });
+    let deleteQuery3 = db.query('DELETE FROM third_day WHERE date < CURDATE()', (err, result) => {
+        console.log('Third_day Refreshed!!!');
+    });
+    res.send(`
+        <html>
+        <head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
+        <body>
+            <div class='text-center container pt-5'>
+                <h3>HomePage </h3><br><br>
+                <a href='/patientlogin'>Click here for Login</a><br><br>
+                <a href='/patientreg'>Click here for Registration</a><br><br>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+app.get('/patientreg', (req, res) => {
+    res.render('patient_reg');
+});
+
+app.post('/patientreg', (req, res) => {
+    let data = {
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password1
+    };
+    let passwords = {
+        password1: req.body.password1,
+        password2: req.body.password2
+    };
+
+    if(passwords.password1 !== passwords.password2) {
+        res.render('patient_reg', {password: 'Passwords are not matching!!'});
+    }
+    else {
+        let checkingUniqueUsernameQuery =  db.query(`SELECT COUNT(*) FROM patient WHERE username = '${data.username}'`, (err, result) => {
+            if(err) throw err;
+            let countResult = result[0];
+            let count;
+            for(var i in countResult) {
+                count = countResult[i];
+            }
+            // console.log(count);
+            if(count > 0) {
+                res.render('patient_reg', {username: 'Username is already taken!!!'});
+            }
+
+        });
+        // let sql = 'INSERT INTO patient SET ?';
+        // let query = db.query(sql, data, (err, result) => {
+        //     if(err) throw err;
+        //     res.redirect('/');
+        // });
+    }
+});
 
 //Patient request
 app.post('/patient', (req, res) => {
@@ -498,9 +550,10 @@ app.post('/patient', (req, res) => {
     }
     else {
         res.render('display_error', {display: 'Please enter all details!!'});
-    }   
-    
+    }    
 });
+
+//
 
 app.listen(3002, () => {
     console.log('Server running on port 3002...');
