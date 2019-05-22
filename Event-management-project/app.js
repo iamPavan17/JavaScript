@@ -107,6 +107,7 @@ app.get('/artist_home_training', (req, res) => {
 app.get('/norartist_home_training', (req, res) => {
     let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${req.session.username   }'`, (err, result) => {
         if(err) throw err;
+        result['username'] = req.session.username;
         res.render('norartist_home_training', {display: result});
     })
 });
@@ -215,7 +216,7 @@ app.get('/norartist_home_performance', (req, res) => {
     let query = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
         result['username'] = req.session.username;
-        res.render('artist_home_performance', {display: result});
+        res.render('norartist_home_performance', {display: result});
     })
 });
 
@@ -261,7 +262,7 @@ app.post('/norartist_performance_insert', (req, res) => {
         let query2 = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
             if(err) throw err;
             result['username'] = req.session.username;
-            res.render('artist_home_performance', {display: result});
+            res.render('norartist_home_performance', {display: result});
         })
     })
 });
@@ -395,6 +396,14 @@ app.post('/norartist_about_update', (req, res) => {
     });
 });
 
+app.get('/norartist_home', (req, res) => {
+    let query2 = db.query(`SELECT * FROM new_artist2 WHERE username = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        // result['user'] = req.session.username;
+        res.render('norartist_home', {display: result});
+    });
+})
+
 app.post('/norartistlogin', (req, res) => {
     let data = {
         username: req.body.username,
@@ -475,6 +484,40 @@ app.get('/users_home_artist', (req, res) => {
         // console.log(result);
         result['username'] = req.session.username;        
         res.render('users_home_artist', {display: result});
+    });
+});
+
+app.post('/users_home_artist_info', (req, res) => {
+    let data = {
+        id: req.body.id
+    };
+    let sql = `SELECT * FROM new_artist WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('users_home_artist_info', {display: result})
+    });
+});
+
+app.post('/users_home_artist_info2', (req, res) => {
+    let data = {
+        id: req.body.id
+    };
+    let sql = `SELECT * FROM new_artist2 WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('users_home_artist_info', {display: result})
+    });
+});
+
+app.get('/users_home_artist2', (req, res) => {
+    let sql = 'SELECT * FROM new_artist2';
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        result['username'] = req.session.username;        
+        res.render('users_home_artist2', {display: result});
     });
 });
 

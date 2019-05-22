@@ -16,42 +16,60 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand pl-4" href="#">Welcome {{this.username}}!</a>
+      <a class="navbar-brand pl-4" href="#">Welcome {{display.username}}!</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Bio <span class="sr-only">(current)</span></a>
+          <li class="nav-item pl-2">
+            <a class="nav-link" href="/norartist_home">Bio</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/norartist_home_performance">Performance list</a>
+            <a class="nav-link" href="/norartist_home_performance">Performance list </a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="#">Gallery</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/norartist_home_schedule">Schedule</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/norartist_home_schedule">Schedule  <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_training">Training</a>
           </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a href='/logout' class="pl-3" style="color:white; font-size: 14px"><i>(Logout)</i></a>
+            </form>
       </div>
     </nav>
 
-    <form method="POST" action="norartist_home_schedule">
-        date: <input type="date" name="date" min="2019-05-11"><br>
-        title: <input type="text" name="title"><br>
-        link: <input type="text" name="link"><br>
-        <input type="submit">
-    </form>
-
-    <div id="caleandar">
-
+    <div class="container p-3">
+      <h3 class="pb-3">Create Schedule</h3>
+      <form method="POST" action="norartist_home_schedule">
+        <div class="row">
+          <div class="form-group col-6">
+              date: <input type="date" name="date" min="2019-05-11" class="form-control">
+          </div>
+          <div class="form-group col-6">
+              title: <input type="text" name="title" class="form-control">
+          </div>
+          <div class="form-group col-6">
+            link: <input type="text" name="link" class="form-control">
+          </div>
+        </div>
+          <input type="submit" class="btn btn-outline-primary">
+          
+      </form>
     </div>
+
+    <div class="container" >
+      <div id="caleandar" align="center"><h3 class="p-3">Calender</h3>
+      </div>
+    </div>
+          
+
     <script type="text/javascript" src="../public/js/caleandar.js"></script>
     <script>
         var eventData = decodeURIComponent("{{{display}}}");
