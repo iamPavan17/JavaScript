@@ -74,6 +74,7 @@
                         <th scope="col">Timings</th>
                         <th scope="col">Address</th>
                         <th scope="col">Batches</th>
+                        <th scope="col">Contact</th>
                         {{!-- <th scope="col">Status</th> --}}
                     </tr>
                 </thead>
@@ -83,6 +84,7 @@
                             <td>{{this.timings}}</td>
                             <td>{{this.address}}</td>
                             <td>{{this.batches}}</td>
+                            <td>{{this.contact}}</td>
                             {{!-- <td>{{this.status}}</td> --}}
                         </tr>{{/each}}
                 </tbody>
@@ -90,4 +92,9 @@
         </div> 
 
 </body>
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+  </script>
 </html>
