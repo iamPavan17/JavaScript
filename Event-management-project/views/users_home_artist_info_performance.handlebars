@@ -8,6 +8,7 @@
 <meta name="keywords" content="">
 <meta name="author" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
 <title>Event</title>
 <link rel="stylesheet" href="../public/css/users_home_artist/bootstrap.min.css">
 <link rel="stylesheet" href="../public/css/users_home_artist/font-awesome.min.css">
@@ -39,59 +40,73 @@
                     <span class="icon icon-bar"></span>
                     <span class="icon icon-bar"></span>
                </button>
-               <a href="" class="navbar-brand">Event Management</a>
+               <a href="index.html" class="navbar-brand">Event Management</a>
           </div>
           <div class="collapse navbar-collapse">
                <ul class="nav navbar-nav navbar-center">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="/users_home_artist_info_performance">Performance</a></li>
+                    <li><a href="/users_home_artist_info">Home</a></li>
+                    <li class="active"><a href="/users_home_artist_info_performance">Performance</a></li>
                     <li><a href="/users_home_artist_info_training">Training</a></li> 
                </ul>
                <ul class="nav navbar-nav navbar-right">
                     <li><a href="/users_home"><i style="font-size: 13px;"><i class='fas fa-arrow-left'></i> Back to HOME</i></a></li> 
                </ul>
           </div>
-
   </div>
 </div>
 
 <!-- Home Section -->
 
-<section id="home" class="main-home parallax-section">
+<section id="home" class="main-about parallax-section">
      <div class="overlay"></div>
-     <div id="particles-js"></div>
      <div class="container">
           <div class="row">
-               <div class="col-md-12 col-sm-12">{{#each display}}
-                    <h1>Hello! This is {{this.username}}.</h1>{{/each}}
-                    <h4>Discover more about me</h4>
-                    <a href="#b" class="smoothScroll btn btn-default"><i class='fas fa-angle-double-down' style='font-size:21px'></i></a>
+
+               <div class="col-md-12 col-sm-12">
+                    <h1>Performances</h1>
                </div>
 
           </div>
      </div>
 </section>
 
-<!-- Blog Section -->
+
+<!-- About Section -->
 
 <section id="asdb">
      <div class="container" id="b">
           <div class="row">
                <div class="col-md-offset-1 col-md-10 col-sm-12">
                     <div class="blog-post-thumb">
+                        <div class="blog-post-title">
+                              <h3><a href="">Performances List</a></h3>
+                         </div><br>
+                        <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Place</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each display}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.event_name}}</td>
+                            <td>{{this.place}}</td>
+                            <td>{{this.date}}</td>
+                            {{!-- <td>{{this.status}}</td> --}}
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
                          
-                         <div class="blog-post-title">
-                              <h3><a href="#">About me</a></h3>
-                         </div>
-                        {{#each display}}
-                        <div class="container p-5">
-                        <div class="blog-post-des">
-                              <p>{{this.about}}.</p>
-                         </div>{{/each}}
-                        </div>
                          
                     </div>
                </div>
+
           </div>
      </div>
 </section>
@@ -101,6 +116,26 @@
 <footer>
      <div class="container">
           <div class="row">
+
+               <!-- <div class="col-md-5 col-md-offset-1 col-sm-6">
+                    <h3>Neuron Studio</h3>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                    <div class="footer-copyright">
+                         <p>Copyright &copy; 2017 Your Company - Design: Tooplate</p>
+                    </div>
+               </div>
+
+               <div class="col-md-4 col-md-offset-1 col-sm-6">
+                    <h3>Talk to us</h3>
+                    <p><i class="fa fa-globe"></i> 512 Delicious Street, San Francisco, CA 10880</p>
+                    <p><i class="fa fa-phone"></i> 010-020-0990</p>
+                    <p><i class="fa fa-save"></i> info@company.com</p>
+               </div>
+
+               <div class="clearfix col-md-12 col-sm-12">
+                    <hr>
+               </div>-->
+
                <div class="col-md-12 col-sm-12" align="center">
                     Copyright © 2019, Event Management. All rights reserved.
                </div> 
@@ -109,11 +144,11 @@
      </div>
 </footer>
 
+
 <!-- Back top -->
 <a href="#back-top" class="go-top"><i class="fa fa-angle-up"></i></a>
 
 <!-- SCRIPTS -->
-
 <script src="../public/js/users_home_artist/jquery.js"></script>
 <script src="../public/js/users_home_artist/bootstrap.min.js"></script>
 <script src="../public/js/users_home_artist/particles.min.js"></script>
@@ -121,5 +156,6 @@
 <script src="../public/js/users_home_artist/jquery.parallax.js"></script>
 <script src="../public/js/users_home_artist/smoothscroll.js"></script>
 <script src="../public/js/users_home_artist/custom.js"></script>
+
 </body>
 </html>
