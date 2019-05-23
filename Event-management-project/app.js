@@ -487,6 +487,17 @@ app.get('/users_home_artist', (req, res) => {
     });
 });
 
+app.get('/users_home_artist_info', (req, res) => {
+    let sql = `SELECT * FROM new_artist WHERE id = ${req.session.artistId}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // // console.log(result)
+        // req.session.artistName = result[0].username;
+        // req.session.artistId = data.id;
+        res.render('users_home_artist_info', {display: result});
+    });
+});
+
 app.post('/users_home_artist_info', (req, res) => {
     let data = {
         id: req.body.id
@@ -495,9 +506,29 @@ app.post('/users_home_artist_info', (req, res) => {
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         // console.log(result)
+        req.session.artistName = result[0].username;
+        req.session.artistId = data.id;
         res.render('users_home_artist_info', {display: result})
     });
 });
+
+app.get('/users_home_artist_info_training', (req, res) => {
+    let sql = `SELECT * FROM artist_training WHERE username = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('users_home_artist_info_training', {display: result})
+    });
+})
+
+app.get('/users_home_artist_info_performance', (req, res) => {
+    let sql = `SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('users_home_artist_info_performance', {display: result})
+    });
+})
 
 app.post('/users_home_artist_info2', (req, res) => {
     let data = {
@@ -506,7 +537,9 @@ app.post('/users_home_artist_info2', (req, res) => {
     let sql = `SELECT * FROM new_artist2 WHERE id = ${data.id}`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
-        // console.log(result)
+        // console.log(result[0].username)
+        req.session.artistName = result[0].username;
+        req.session.artistId = data.id;
         res.render('users_home_artist_info', {display: result})
     });
 });
