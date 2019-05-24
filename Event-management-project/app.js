@@ -674,24 +674,30 @@ app.post('/inviteartist2', (req, res) => {
         a_code: req.body.code,
         status: 'pending'
     };
-
-    let sql1 = 'SELECT uuid()';
-    let query1 = db.query(sql1, (err, result) => {
-        if(err) throw err;
-        var codeResult = result[0];
-        for(var i in codeResult) {
-            let filteredCode = codeResult[i].slice(0,7);
-            data['a_code'] = filteredCode;
-        }
-        // console.log(data)
-        let sql = 'INSERT INTO invite_artist2 SET ?';
-        let query = db.query(sql, data, (err, result) => {
-        if(err) throw err;
-        // message(data);
-        // console.log(datalog);
-        res.render('artist_home_invite_user', {message: 'Invitation successfully sent!!!'});
-    });
-    });
+    
+    let phoneNumberVal = /^\d{10}$/;
+    if(data.a_phone.match(phoneNumberVal)) {
+        let sql1 = 'SELECT uuid()';
+        let query1 = db.query(sql1, (err, result) => {
+            if(err) throw err;
+            var codeResult = result[0];
+            for(var i in codeResult) {
+                let filteredCode = codeResult[i].slice(0,7);
+                data['a_code'] = filteredCode;
+            }
+            // console.log(data)
+            let sql = 'INSERT INTO invite_artist2 SET ?';
+            let query = db.query(sql, data, (err, result) => {
+            if(err) throw err;
+            // message(data);
+            // console.log(datalog);
+            res.render('artist_home_invite_user', {message: 'Invitation successfully sent!!!'});
+        });
+        });
+    }
+    else {
+        res.render('artist_home_invite_user', {message: 'Please enter valid phone number!!'});
+    }
 });
 
 
