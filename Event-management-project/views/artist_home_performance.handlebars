@@ -22,11 +22,11 @@
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
          <ul class="navbar-nav mr-auto pl-5">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Bio <span class="sr-only">(current)</span></a>
+          <li class="nav-item">
+            <a class="nav-link" href="/artist_home">Bio</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_performance">Performance list</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/artist_home_performance">Performance list  <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="#">Gallery</a>
@@ -35,7 +35,7 @@
             <a class="nav-link" href="/artist_home_schedule">Schedule</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="#">Training</a>
+            <a class="nav-link" href="/artist_home_training">Training</a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_invite_user">Invite Artist</a>
@@ -52,14 +52,34 @@
         </ul>
       </div>
     </nav>
-
-    <form method="POST" action="artist_performance_insert">
-      EventName: <input type="text" name="event_name"><br>
-      Place: <input type="text" name="place" id=""><br>
-      date: <input type="date" name="date"><br>
-      image: <input type="text" value="null" name="image"><br>
-      <input type="submit" value="Submit">
-    </form>
+<div class="container p-4">
+    <h3>Create Event</h3><br>
+      <form method="POST" action="artist_performance_insert">
+        <div class="row">
+          <div class="form-group col-6">
+          EventName: <input type="text" name="event_name" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-6">
+            Place: <input type="text" name="place" id="" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-6">       
+          date: <input type="date" name="date" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-6">       
+          image: <input type="text" value="null" name="image" class="form-control">
+        </div>
+        </div>
+          <div>
+        <input type="submit" value="Submit" class="btn btn-outline-primary" class="col-6">
+        </div>
+      </form>
+</div>
 
         <div class="container pt-5">
             <h3>List of Performances</h3><br>

@@ -24,8 +24,8 @@
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
           <ul class="navbar-nav mr-auto pl-5">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Bio <span class="sr-only">(current)</span></a>
+          <li class="nav-item pl-2">
+            <a class="nav-link" href="/artist_home">Bio </a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_performance">Performance list</a>
@@ -33,11 +33,11 @@
           <li class="nav-item pl-2">
             <a class="nav-link" href="#">Gallery</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_schedule">Schedule</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/artist_home_schedule">Schedule <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="#">Training</a>
+            <a class="nav-link" href="/artist_home_training">Training</a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_invite_user">Invite Artist</a>
@@ -55,15 +55,29 @@
       </div>
     </nav>
 
-    <form method="POST" action="artist_home_schedule">
-        date: <input type="date" name="date" min="2019-05-11"><br>
-        title: <input type="text" name="title"><br>
-        link: <input type="text" name="link"><br>
-        <input type="submit">
-    </form>
+   <div class="container p-3">
+      <h3 class="pb-3">Create Schedule</h3>
+      <form method="POST" action="artist_home_schedule">
+        <div class="row">
+          <div class="form-group col-6">
+              date: <input type="date" name="date" min="2019-05-11" class="form-control">
+          </div>
+          <div class="form-group col-6">
+              Title: <input type="text" name="title" class="form-control">
+          </div>
+          <div class="form-group col-6">
+            Place: <input type="text" name="link" class="form-control">
+          </div>
+        </div>
+          <input type="submit" class="btn btn-outline-primary">
+          
+      </form>
+    </div>
 
-    <div id="caleandar">
 
+    <div class="container" >
+      <div id="caleandar" align="center"><h3 class="p-3">Calender</h3>
+      </div>
     </div>
     <script type="text/javascript" src="../public/js/caleandar.js"></script>
     <script>
@@ -74,8 +88,8 @@
         jsonObj.forEach((a) => {
             eventDemo.push({
                 'Date': new Date(a.year, a.month - 1, a.day),
-                'Title': a.title,
-                'Link': a.link
+                'Title': `${a.title} - ${a.link}`,
+                'Link': '#'
             });
         });
 
