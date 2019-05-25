@@ -126,6 +126,7 @@ app.get('/', (req, res) => {
     `);
 });
 
+//patient registration
 app.get('/patientreg', (req, res) => {
     res.render('patient_reg');
 });
@@ -147,26 +148,60 @@ app.post('/patientreg', (req, res) => {
         res.render('patient_reg', {password: 'Passwords are not matching!!'});
     }
     else {
-        let checkingUniqueUsernameQuery =  db.query(`SELECT COUNT(*) FROM patient WHERE username = '${data.username}'`, (err, result) => {
-            if(err) throw err;
-            let countResult = result[0];
-            let count;
-            for(var i in countResult) {
-                count = countResult[i];
-            }
-            // console.log(count);
-            if(count > 0) {
-                res.render('patient_reg', {username: 'Username is already taken!!!'});
-            }
-
-        });
-        // let sql = 'INSERT INTO patient SET ?';
-        // let query = db.query(sql, data, (err, result) => {
-        //     if(err) throw err;
-        //     res.redirect('/');
-        // });
+        let phoneValidation = /^\d{10}$/;
+        if(data.phone.match(phoneValidation)) {
+            let checkingUniqueUsernameQuery =  db.query(`SELECT COUNT(*) FROM patient WHERE username = '${data.username}'`, (err, result) => {
+                if(err) throw err;
+                let countResult = result[0];
+                let count;
+                for(var i in countResult) {
+                    count = countResult[i];
+                }
+                // console.log(count);
+                if(count > 0) {
+                    res.render('patient_reg', {username: 'Username is already taken!!!'});
+                }
+                else {
+                    let sql = 'INSERT INTO patient SET ?';
+                    let query = db.query(sql, data, (err, result) => {
+                        if(err) throw err;
+                        res.redirect('/');
+                    });
+                }
+            });
+        }
+        else {
+            res.render('patient_reg', {phonenum: 'Please enter a valid phone number!!'});
+        }
     }
 });
+
+//patient login
+app.get('/patientlogin', (req, res) => {
+    res.render('patient_login');
+});
+
+app.post('/patientlogin', (req, res) => {
+    let data = {
+        username: req.body.username,
+        password: req.body.password1
+    };
+    let sql = `SELECT COUNT(*) FROM patient WHERE username = '${data.username}'`;
+    let query = db.query(sql, (err, result) => {
+        let countResult = result[0];
+        let count = [];
+        for(var i in countResult) {
+            count.push(countResult[i]);
+        }
+        if(count > 0) {
+            res.render('patient-home');
+        }
+        else {
+            res.render('patient_login', {error: 'Username/Password is Incoorect!!'});
+        }
+    })
+});
+
 
 //Patient request
 app.post('/patient', (req, res) => {
