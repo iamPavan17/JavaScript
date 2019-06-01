@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 
 //Home Page
 app.get('/', (req, res) => {
+    // let sql = 'SELECT * FROM artist_schedule WHERE date < CURDATE()';
     res.send(`
         <html>
         <head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
@@ -91,7 +92,7 @@ app.get('/listaccartist', (req, res) => {
 });
 
 app.get('/artist_home_list_artist', (req, res ) => {
-    let sql = 'SELECT * FROM invite_artist2';
+    let sql = `SELECT * FROM invite_artist2 WHERE super_user = '${req.session.username}'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         res.render('artist_home_list_artist', {display: result});
@@ -211,8 +212,28 @@ app.get('/artist_home_performance', (req, res) => {
         result['username'] = req.session.username;
         let oldScheduleDataQuery = db.query(`SELECT * FROM artist_schedule WHERE date < CURDATE() AND artist_name = '${req.session.username}'`, (err, result) => {
             if(err) throw err;
-            console.log(result);
-        })
+            // console.log(result);
+            var newData = {};
+            let a = result[0];
+            for(var i in a){
+                newData[i] = a[i];
+            }
+            // console.log(newData);
+            // if(Object.keys(newData).length) {
+            //     console.log('hello');
+            // }
+            // console.log(newData.date.slice(0,11));
+            if(Object.keys(newData).length) {
+                let sql = `INSERT INTO artist_performance_list(event_name, place, date, image_loc, artist_name) VALUES('${newData.title}', '${newData.link}', '${newData.date}', 'null', '${newData.artist_name}')`;
+                let addtoPerformanceQuery = db.query(sql, (err, result) => {
+                    if(err) throw err;
+                });
+                let sql1 = `DELETE FROM artist_schedule WHERE id = ${newData.id}`;
+                let deleteScheduleQuery = db.query(sql1, (err, result) => {
+                    if(err) throw err;
+                });
+                }  
+        });
         res.render('artist_home_performance', {display: result});
     })
 });
@@ -221,6 +242,31 @@ app.get('/norartist_home_performance', (req, res) => {
     let query = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
         result['username'] = req.session.username;
+        result['username'] = req.session.username;
+        let oldScheduleDataQuery = db.query(`SELECT * FROM artist_schedule WHERE date < CURDATE() AND artist_name = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            // console.log(result);
+            var newData = {};
+            let a = result[0];
+            for(var i in a){
+                newData[i] = a[i];
+            }
+            // console.log(newData);
+            // if(Object.keys(newData).length) {
+            //     console.log('hello');
+            // }
+            // console.log(newData.date.slice(0,11));
+            if(Object.keys(newData).length) {
+                let sql = `INSERT INTO artist_performance_list(event_name, place, date, image_loc, artist_name) VALUES('${newData.title}', '${newData.link}', '${newData.date}', 'null', '${newData.artist_name}')`;
+                let addtoPerformanceQuery = db.query(sql, (err, result) => {
+                    if(err) throw err;
+                });
+                let sql1 = `DELETE FROM artist_schedule WHERE id = ${newData.id}`;
+                let deleteScheduleQuery = db.query(sql1, (err, result) => {
+                    if(err) throw err;
+                });
+                }  
+        });
         res.render('norartist_home_performance', {display: result});
     })
 });
@@ -230,7 +276,7 @@ app.get('/artist_home', (req, res) => {
         if(err) throw err;
         res.render('artist_home', {display: result});
     }) 
-})
+});
 
 app.post('/artist_performance_insert', (req, res) => {
     let data = {
@@ -677,7 +723,9 @@ app.post('/inviteartist2', (req, res) => {
         a_email: req.body.email,
         a_phone: req.body.phone,
         a_code: req.body.code,
-        status: 'pending'
+        status: 'pending',
+        super_user: req.session.username,
+        count: 0
     };
     
     if(data.a_name && data.a_email && data.a_phone) {
@@ -695,7 +743,7 @@ app.post('/inviteartist2', (req, res) => {
                 let sql = 'INSERT INTO invite_artist2 SET ?';
                 let query = db.query(sql, data, (err, result) => {
                 if(err) throw err;
-                // message(data);
+                message(data);
                 // console.log(datalog);
                 res.render('artist_home_invite_user', {message: 'Invitation successfully sent!!!'});
             });
@@ -746,7 +794,19 @@ app.post('/norartistreg', (req, res) => {
             count.push(countResult[i]);
         }
         if(count[0]) {
-            let query1 = db.query(`UPDATE invite_artist2 SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+            let query1 = db.query(`UPDATE invite_artist2 SET status = 'accepted', count = 1 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                // let creditsUp = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = ''`)
+                let query3 = db.query(`SELECT * FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                    var superUserObj = {};
+                    let a = result[0];
+                    for(var i in a) {
+                        superUserObj[i] = a[i];
+                    }
+                    // console.log(result);
+                    let query4 = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = '${superUserObj.super_user}'`, (err, result) => {
+                        if(err) throw err;
+                    })
+                })
                 if(err) throw err;
                 let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}')`;
                 let query2 = db.query(sql2, (err, result) => {
