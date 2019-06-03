@@ -650,6 +650,7 @@ app.post('/norartist_about_update', (req, res) => {
 app.get('/norartist_home', (req, res) => {
     let query2 = db.query(`SELECT * FROM new_artist2 WHERE username = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
+        // console.log(result[0]);
         // result['user'] = req.session.username;
         res.render('norartist_home', {display: result});
     });
