@@ -51,6 +51,34 @@
       </div>
     </nav>
 
+       <div class="container pt-5">
+            <h3>Appointment Request</h3><br>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        {{!-- <th scope="col">Email</th> --}}
+                        <th scope="col">Phone</th>
+                        <th scope="col">Date</th>
+                        {{!-- <th scope="col">Time</th> --}}
+                        <th scope="col">Status</th>
+                        <th scope="col">Reason</th>
+                    </tr>
+                </thead>
+                <tbody>{{#each display}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.user_name}}</td>
+                            <td>{{this.user_phone}}</td>
+                            {{!-- <td>{{this.user_phone}}</td> --}}
+                            <td>{{this.user_date}}</td>
+                            <td>{{this.status}}</td>
+                            <td>{{this.reason}}</td>
+                        </tr>{{/each}}
+                </tbody>
+            </table>
+        </div> 
 
 </body>
 </html>

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="../public/css/users_home_artist/font-awesome.min.css">
 <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
 
-<!-- Main css -->
+<!-- - css -->
 <link rel="stylesheet" href="../public/css/users_home_artist/style.css">
 <link href="https://fonts.googleapis.com/css?family=Lora|Merriweather:300,400" rel="stylesheet">
 
@@ -46,8 +46,8 @@
                <ul class="nav navbar-nav navbar-center">
                     <li><a href="/users_home_artist_info">Home</a></li>
                     <li ><a href="/users_home_artist_info_performance">Performance</a></li>
-                    <li class="active"><a href="/users_home_artist_info_training">Training</a></li> 
-                    <li class=""><a href="/users_home_artist_info_schedule">Schedule</a></li>
+                    <li ><a href="/users_home_artist_info_training">Training</a></li> 
+                    <li class="active"><a href="/users_home_artist_info_schedule">Schedule</a></li>
                </ul>
                <ul class="nav navbar-nav navbar-right">
                     <li><a href="/users_home"><i style="font-size: 13px;"><i class='fas fa-arrow-left'></i> Back to HOME</i></a></li> 
@@ -58,14 +58,13 @@
 
 <!-- Home Section -->
 
-<section id="home" class="main-contact parallax-section">
+<section id="home" class="main-single-post parallax-section">
      <div class="overlay"></div>
      <div class="container">
           <div class="row">
 
                <div class="col-md-12 col-sm-12">
-                    <h1>Training</h1>
-
+                    <h1>Schedule</h1>
                </div>
 
           </div>
@@ -81,26 +80,26 @@
                <div class="col-md-offset-1 col-md-10 col-sm-12">
                     <div class="blog-post-thumb">
                         <div class="blog-post-title">
-                              <h3><a href="">Training</a></h3>
+                              <h3><a href="">Schedule</a></h3>
                          </div><br>
                         <table class="table">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Timings</th>
+                        <th scope="col">Title</th>
                         <th scope="col">Place</th>
-                        <th scope="col">Batches</th>
-                        <th scope="col">Contact</th>
+                        <th scope="col">Date</th>
+                        {{!-- <th scope="col">Contact</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     {{#each display}}
                         <tr>
                             <td>{{this.id}}</td>
-                            <td>{{this.timings}}</td>
-                            <td>{{this.address}}</td>
-                            <td>{{this.batches}}</td>
-                            <td>{{this.contact}}</td>
+                            <td>{{this.title}}</td>
+                            <td>{{this.link}}</td>
+                            <td>{{this.date}}</td>
+                            {{!-- <td>{{this.contact}}</td> --}}
                         </tr>
                     {{/each}}
                 </tbody>
@@ -108,52 +107,6 @@
                          
                          
                     </div>
-               </div>
-
-          </div>
-     </div>
-</section>
-
-
-<section id="contact">
-     <div class="container">
-          <div class="row">
-
-               <div class="col-md-offset-1 col-md-10 col-sm-12">
-                    <h4><b>Want to book an Appointment?</b></h4> <span>{{msg}}</span>
-                    <form action="sendAppointment" method="POST">
-                         <div class="col-md-4 col-sm-4">
-                              <input name="name" type="text" class="form-control" id="name" placeholder="Name">
-                         </div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="email" type="email" class="form-control" id="email" placeholder="Email">
-                      	 </div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="phone" type="text" class="form-control" id="subject" placeholder="Phone">
-                      	</div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="date" type="date" class="form-control" id="subject" placeholder="Date">
-                      	</div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="time" type="number" class="form-control" id="subject" placeholder="Time" min="1" max="12">
-                              {{!-- <select name="" id="" class="form-control">
-                                   <option value="1">1</option>
-                                   <option value="1">1</option>
-                              </select> --}}
-                      	</div>
-                           <div class="col-md-4 col-sm-4">
-                              <select name="format" id="" class="form-control">
-                                   <option value="AM">AM</option>
-                                   <option value="PM">PM</option>
-                              </select>
-                      	</div>
-                         <div class="col-md-12 col-sm-12">
-                              <textarea name="message" rows="5" class="form-control" id="message" placeholder="Message"></textarea>
-                         </div>
-                         <div class="col-md-3 col-sm-6">
-                              <input name="submit" type="submit" class="form-control" id="submit" value="Send"> 
-                         </div>
-                    </form>
                </div>
 
           </div>
