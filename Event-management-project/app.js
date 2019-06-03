@@ -30,6 +30,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 //Home Page
 app.get('/', (req, res) => {
@@ -105,6 +106,205 @@ app.get('/artist_home_training', (req, res) => {
         res.render('artist_home_training', {display: result});
     })
 });
+
+app.get('/artist_home_appointment', (req, res) => {
+    let query = db.query(`SELECT * FROM artist_appointment WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        // console.log(dateFilter.slice(0,16));
+        for(var i in result) {
+            let dateFilter = String(result[i].user_date);
+            result[i]['user_date'] = dateFilter.slice(0,16);
+        }   
+        // console.log(result)
+        // result[0]['user_date'] = dateFilter.slice(0,16);
+        res.render('artist_home_appointment', {display: result});
+    });
+});
+
+app.get('/norartist_home_appointment', (req, res) => {
+    let query = db.query(`SELECT * FROM artist_appointment WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        // console.log(dateFilter.slice(0,16));
+        for(var i in result) {
+            let dateFilter = String(result[i].user_date);
+            result[i]['user_date'] = dateFilter.slice(0,16);
+        }   
+        // console.log(result)
+        // result[0]['user_date'] = dateFilter.slice(0,16);
+        result['ArtistNama'] = req.session.username;
+        res.render('norartist_home_appointment', {display: result});
+    });
+});
+
+function appointmentMessageAccept(messageBody) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+
+    req.query({
+    "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
+    "sender_id": "FSTSMS",
+    "message": `Dear ${messageBody.user_name}, ${messageBody.artistname}, has accepted to your Appointment request.`,
+    "language": "english",
+    "route": "p",
+    "numbers": messageBody.user_phone,
+    });
+
+    req.headers({
+    "cache-control": "no-cache"
+    });
+
+
+    req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+    console.log(res.body);
+    });
+}
+
+function appointmentMessageReject(messageBody) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+
+    req.query({
+    "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
+    "sender_id": "FSTSMS",
+    "message": `Dear ${messageBody.user_name}, ${messageBody.artistname}, has rejected to your Appointment request.`,
+    "language": "english",
+    "route": "p",
+    "numbers": messageBody.user_phone,
+    });
+
+    req.headers({
+    "cache-control": "no-cache"
+    });
+
+
+    req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+    console.log(res.body);
+    });
+}
+
+app.post('/appointmentAccept', (req, res) => {
+    let data = {
+        id: req.body.id,
+        status: req.body.status,
+        message: 'none'
+    };
+    let sql = `SELECT * FROM artist_appointment WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let a = result[0];
+        var appData = {};
+        for(var i in a) {
+            appData[i] = a[i];
+        }
+        // console.log(appData);
+        let query2 = db.query(`DELETE FROM artist_appointment WHERE id = ${data.id}`, (err, result) => {
+            if(err) throw err;
+        });
+        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artistname}', '${data.status}', '${data.message}')`, (err, result) => {
+            if(err) throw err;
+            appointmentMessageAccept(appData);
+            res.redirect('artist_home_appointment');
+        });
+    });
+});
+
+app.post('/appointmentReject', (req, res) => {
+    let data = {
+        id: req.body.id,
+        status: req.body.status,
+        message: req.body.message
+    };
+    let sql = `SELECT * FROM artist_appointment WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let a = result[0];
+        var appData = {};
+        for(var i in a) {
+            appData[i] = a[i];
+        }
+        // console.log(appData);
+        let query2 = db.query(`DELETE FROM artist_appointment WHERE id = ${data.id}`, (err, result) => {
+            if(err) throw err;
+        });
+        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artist_name}', '${data.status}', '${data.message}')`, (err, result) => {
+            if(err) throw err;
+            appointmentMessageReject(appData);
+            res.redirect('artist_home_appointment');
+        });
+    });
+});
+
+app.get('/artist_home_appointment_history', (req, res) => {
+    let sql = `SELECT * FROM appointment_history WHERE artist_name = '${req.session.username}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('artist_home_appointment_history', {display: result});
+    })
+})
+
+app.post('/appointmentAccept1', (req, res) => {
+    let data = {
+        id: req.body.id,
+        status: req.body.status,
+        message: 'none'
+    };
+    let sql = `SELECT * FROM artist_appointment WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let a = result[0];
+        var appData = {};
+        for(var i in a) {
+            appData[i] = a[i];
+        }
+        // console.log(appData);
+        let query2 = db.query(`DELETE FROM artist_appointment WHERE id = ${data.id}`, (err, result) => {
+            if(err) throw err;
+        });
+        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artistname}', '${data.status}', '${data.message}')`, (err, result) => {
+            if(err) throw err;
+            appointmentMessageAccept(appData);
+            res.redirect('norartist_home_appointment');
+        });
+    });
+});
+
+app.post('/appointmentReject1', (req, res) => {
+    let data = {
+        id: req.body.id,
+        status: req.body.status,
+        message: req.body.message
+    };
+    let sql = `SELECT * FROM artist_appointment WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let a = result[0];
+        var appData = {};
+        for(var i in a) {
+            appData[i] = a[i];
+        }
+        // console.log(appData);
+        let query2 = db.query(`DELETE FROM artist_appointment WHERE id = ${data.id}`, (err, result) => {
+            if(err) throw err;
+        });
+        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artist_name}', '${data.status}', '${data.message}')`, (err, result) => {
+            if(err) throw err;
+            appointmentMessageReject(appData);
+            res.redirect('norartist_home_appointment');
+        });
+    });
+});
+
+app.get('/artist_home_appointment_history1', (req, res) => {
+    let sql = `SELECT * FROM appointment_history WHERE artist_name = '${req.session.username}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('norartist_home_appointment_history', {display: result});
+    })
+})
 
 app.get('/norartist_home_training', (req, res) => {
     let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${req.session.username   }'`, (err, result) => {
@@ -559,6 +759,7 @@ app.post('/users_home_artist_info', (req, res) => {
         // console.log(result)
         req.session.artistName = result[0].username;
         req.session.artistId = data.id;
+        req.session.artistPhone = result[0].phone;
         res.render('users_home_artist_info', {display: result})
     });
 });
@@ -569,6 +770,15 @@ app.get('/users_home_artist_info_training', (req, res) => {
         if(err) throw err;
         // console.log(result)
         res.render('users_home_artist_info_training', {display: result})
+    });
+});
+
+app.get('/users_home_artist_info_schedule', (req, res) => {
+    let sql = `SELECT * FROM artist_schedule WHERE artist_name = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('users_home_artist_info_schedule', {display: result})
     });
 })
 
@@ -591,6 +801,7 @@ app.post('/users_home_artist_info2', (req, res) => {
         // console.log(result[0].username)
         req.session.artistName = result[0].username;
         req.session.artistId = data.id;
+        req.session.artistPhone = result[0].phone;
         res.render('users_home_artist_info', {display: result})
     });
 });
@@ -609,8 +820,11 @@ app.get('/users_home', (req, res) => {
     let query = db.query(`SELECT * FROM users WHERE name = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
         // console.log(result);
-        result['username'] = req.session.username;        
-        res.render('users_home', {display: result});
+        let query = db.query(`SELECT * FROM appointment_history WHERE user_name = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            result['username'] = req.session.username;
+            res.render('users_home', {display: result});
+        });     
     });
 });
 
@@ -632,7 +846,7 @@ app.post('/userlogin', (req, res) => {
         // console.log(result);
         result['username'] = req.session.username;
         if(count[0]) {
-            res.render('users_home', {display: result});
+            res.redirect('/users_home');
         }
         else {
             res.send('Incorrect Username and/or Password!!!');
@@ -687,6 +901,56 @@ function message(messageBody) {
     console.log(res.body);
     });
 }
+
+function appointmentMessage(messageBody) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+
+    req.query({
+    "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
+    "sender_id": "FSTSMS",
+    "message": `Dear ${messageBody.artist_name}, ${messageBody.user_name} has sent an Appointment request!!!`,
+    "language": "english",
+    "route": "p",
+    "numbers": messageBody.phone,
+    });
+
+    req.headers({
+    "cache-control": "no-cache"
+    });
+
+
+    req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+    console.log(res.body);
+    });
+}
+
+app.post('/sendAppointment', (req, res) => {
+    let data = {
+        user_name: req.body.name,
+        user_email: req.body.email,
+        user_phone: req.body.phone,
+        user_date: req.body.date,
+        user_time: req.body.time, 
+        user_format: req.body.format,
+        user_message: req.body.message,
+        artist_name: req.session.artistName
+    };
+    let sql = 'INSERT INTO artist_appointment SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        data['phone'] = req.session.artistPhone;
+        appointmentMessage(data);
+        let sql1 = `SELECT * FROM artist_training WHERE username = '${req.session.artistName}'`;
+        let query1 = db.query(sql1, (err, result) => {
+        if(err) throw err;
+        let msg = 'Message has been sent!!!';
+        res.render('users_home_artist_info_training', {display: result, msg: msg})
+    });
+    }); 
+});
 
 app.post('/inviteartist', (req, res) => {
     let data = {
@@ -777,7 +1041,8 @@ app.post('/norartistreg', (req, res) => {
         singer: req.body.s,
         dancer: req.body.d,
         musician: req.body.m,
-        badge: 'none'
+        badge: 'none',
+        phone: req.body.phone
     };
 
     if(data.singer && data.dancer && data.musician) {
@@ -805,10 +1070,10 @@ app.post('/norartistreg', (req, res) => {
                     // console.log(result);
                     let query4 = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = '${superUserObj.super_user}'`, (err, result) => {
                         if(err) throw err;
-                    })
-                })
+                    });
+                });
                 if(err) throw err;
-                let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}')`;
+                let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}', ${data.phone})`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
                     res.redirect('/');
@@ -826,7 +1091,8 @@ app.post('/artistreg', (req, res) => {
         username: req.body.username,
         password: req.body.password,
         code: req.body.code,
-        email: req.body.email
+        email: req.body.email,
+        phone: req.body.phone
     };
     let sql = `SELECT COUNT(*) FROM invite_artist WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
     let query = db.query(sql, (err, result) => {
@@ -839,7 +1105,7 @@ app.post('/artistreg', (req, res) => {
         if(count[0]) {
             let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
                 if(err) throw err;
-                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}')`;
+                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone})`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
                     res.redirect('/');
@@ -854,4 +1120,4 @@ app.post('/artistreg', (req, res) => {
 
 app.listen(3000, () => {
     console.log('Server running on port 3000...');
-})
+});
