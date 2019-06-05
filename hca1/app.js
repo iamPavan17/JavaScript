@@ -1,10 +1,17 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const path = require('path');
 const mysql = require('mysql');
 
 const app = express();
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -186,14 +193,17 @@ app.post('/patientlogin', (req, res) => {
         username: req.body.username,
         password: req.body.password1
     };
-    let sql = `SELECT COUNT(*) FROM patient WHERE username = '${data.username}'`;
+    let sql = `SELECT COUNT(*) FROM patient WHERE username = '${data.username}' AND password = '${data.password}'`;
     let query = db.query(sql, (err, result) => {
         let countResult = result[0];
         let count = [];
         for(var i in countResult) {
             count.push(countResult[i]);
         }
+        // console.log(count)
         if(count > 0) {
+            req.session.loggedin = true;
+            req.session.username = data.username;
             res.render('patient-home');
         }
         else {
@@ -589,6 +599,10 @@ app.post('/patient', (req, res) => {
 });
 
 //
+app.get('/logout', (req, res) => {
+    res.redirect('/');
+    req.session.destroy();
+});
 
 app.listen(3002, () => {
     console.log('Server running on port 3002...');
