@@ -1,0 +1,97 @@
+<html>
+    <head> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="https://www.babylonhealth.com/assets/images/header/babylon-health-logo-mobile.png" width="40" height="39" class="d-inline-block align-top" alt="">
+            <span style="font-size: 26px; font-family: 'Righteous', cursive; color:rgb(57, 17, 121);">SMART <span style="color: rgb(96, 109, 228);">HEALTH</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav" align="right">
+                
+                </div>
+            </div>
+                <span class="navbar-text">
+                    <a class="nav-item nav-link" href="/patientreg"><span  style="color: rgb(88, 90, 228)">Sign up</span></a>
+                </span>
+                <span class="navbar-text pr-5">
+                    <a class="nav-item nav-link" href="/patientlogin"><span  style="color: rgb(88, 90, 228)">Log in</span></a>
+                </span>
+        </nav>
+
+        <div class="bd-example">
+        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+            <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+            </ol>
+            <div class="carousel-inner">
+            <div class="carousel-item active">
+            <div class="col-lg-12" style="position: absolute; top:30%; left:8%;">
+                <h1 class="pt-3" style="color: white; font-size:41px;">We Care for Your Health <br>Every Moment</h1>
+                <p style="color: white; font-size:14px;">A free digital service puts your health in your hands.</p>
+            </div>
+                <img src="../public/img/home.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                {{!-- <h5>First slide label</h5> --}}
+                <button type="button" class="btn btn-outline-light"><i class='fas fa-angle-double-down'></i></button>
+                {{!-- <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> --}}
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <br>
+        <div class="text center container" style="background-color: rgb(9, 14, 80); height: 1px; width: 350px; border-radius: 5px;" >
+
+        </div>
+        <div class=" p-3">
+            <div class="row">
+                <div class="col-6">
+                    <img src='https://assets.babylonhealth.com/redesign/doctor_180503_130853_1.jpg' alt="" class="d-block w-100">
+                </div>
+                <div class="col-6 pl-5">
+                    <h1 class="pl-2" style="margin-top: 40%; font-size: 50px;margin-left:5%;"><span style="color: #200080; font-family: Trebuchet MS;"><b>Book a doctor</b></span><span style="color: rgb(212, 114, 114);font-family: Trebuchet MS;"><b> within <br> minutes, 24/7.</b></span></h1>
+                    <br>
+                    <p class="pl-2" style="color: rgb(23, 55, 102); font-size:15px; margin-left:5%;">&nbsp;Experienced doctors, specialists and therapists are handpicked by us.<br> &nbsp;You can book an appointment with us, by clicking the below button.</p><br>
+                    <button type="button" onclick="location.href='/patientlogin'" class="btn btn-info btn-lg" style="border-radius: 50px; margin-left:5%;">&nbsp;&nbsp;Book an appointment&nbsp;&nbsp;</button>
+                </div>
+
+                <div class="col-6 pl-5" >
+                    <h1 class="pl-2" style="margin-top: 26%; font-size: 50px; margin-left:10%;"><span style="color: #200080; font-family: Trebuchet MS;"><b>This could be the beginning of a healthy <span style="color: rgb(212, 114, 114);font-family: Trebuchet MS;">relationship.</span></b></span></h1>
+                    <br>
+                    <p class="pl-2 " style="color: rgb(23, 55, 102); font-size:15px; margin-left:10%;">&nbsp;A free digital service puts your health in your hands.</p><br>
+                    {{!-- <button type="button" class="btn btn-info btn-lg" style="border-radius: 50px; margin-left:10%;">&nbsp;&nbsp;Book an appointment&nbsp;&nbsp;</button> --}}
+                </div>
+                <div class="col-6" >
+                    <img src="https://assets.babylonhealth.com/redesign/couple.jpg" alt="" class="d-block w-100">
+                </div>
+
+                <div class="col-6">
+                    <img src='https://assets.babylonhealth.com/redesign/brain-040518.jpg' alt="" class="d-block w-100">
+                </div>
+                <div class="col-6 pl-5">
+                    <h1 class="pl-2" style="margin-top: 40%; font-size: 50px;margin-left:5%;"><span style="color: #200080; font-family: Trebuchet MS;"><b>Virtual doctor can<br> identify most </b></span><span style="color: rgb(212, 114, 114);font-family: Trebuchet MS;"><b> medical issues.</b></span></h1>
+                    <br>
+                    <p class="pl-2" style="color: rgb(23, 55, 102); font-size:15px; margin-left:5%;">&nbsp;It understands symptoms you enter and provides you with relevant <br>&nbsp;health and triage information.</p><br>
+                    <button type="button" onclick="location.href='http://127.0.0.1:3005/'" class="btn btn-info btn-lg" style="border-radius: 50px; margin-left:5%;">&nbsp;&nbsp;Ask virtual doctor&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="text center container" style="background-color: rgb(9, 14, 80); height: 1px; width: 350px; border-radius: 5px;" ></div><br>
+        <div class="text center" align="center">
+            <span style="color: rgb(91, 81, 226);">Made with</span> &nbsp;<img src="https://www.babylonhealth.com/assets/images/header/babylon-health-logo-mobile.png" width="32" height="29"  alt="">
+        </div><br>
+    </body>
+</html>
