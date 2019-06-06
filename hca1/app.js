@@ -23,6 +23,8 @@ const db = mysql.createConnection({
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
@@ -119,18 +121,7 @@ app.get('/', (req, res) => {
     let deleteQuery3 = db.query('DELETE FROM third_day WHERE date < CURDATE()', (err, result) => {
         console.log('Third_day Refreshed!!!');
     });
-    res.send(`
-        <html>
-        <head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
-        <body>
-            <div class='text-center container pt-5'>
-                <h3>HomePage </h3><br><br>
-                <a href='/patientlogin'>Click here for Login</a><br><br>
-                <a href='/patientreg'>Click here for Registration</a><br><br>
-            </div>
-        </body>
-        </html>
-    `);
+    res.render('home');
 });
 
 //patient registration
