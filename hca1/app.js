@@ -195,9 +195,26 @@ app.post('/patientlogin', (req, res) => {
         if(count > 0) {
             req.session.loggedin = true;
             req.session.username = data.username;
-            let display = {};
-            display['username'] = req.session.username;
-            res.render('patient-home', {display: display});
+            let timeQuery = db.query('SELECT CURRENT_TIME()', (err, result) => {
+                if(err) throw err;
+                // console.log(result[0]['CURRENT_TIME()']);
+                let curTime = result[0]['CURRENT_TIME()'].slice(0,2);
+                // console.log(dbTime);
+                let time = [];
+                if(curTime > 0 && curTime < 12) {
+                    time.push('morning');
+                }
+                else if(curTime >= 12 && curTime < 16) {
+                    time.push('afternoon');
+                }
+                else {
+                    time.push('evening');
+                }
+                let display = {};
+                display['username'] = req.session.username;
+                display['time'] = time[0];
+                res.render('patient-home', {display: display});
+            });
         }
         else {
             res.render('patient_login', {error: 'Username/Password is Incoorect!!'});
@@ -206,9 +223,26 @@ app.post('/patientlogin', (req, res) => {
 });
 
 app.get('/patient_home', (req, res) => {
-    let display = {};
-    display['username'] = req.session.username;
-    res.render('patient-home', {display: display});
+    let timeQuery = db.query('SELECT CURRENT_TIME()', (err, result) => {
+        if(err) throw err;
+        // console.log(result[0]['CURRENT_TIME()']);
+        let curTime = result[0]['CURRENT_TIME()'].slice(0,2);
+        // console.log(dbTime);
+        let time = [];
+        if(curTime > 0 && curTime < 12) {
+            time.push('morning');
+        }
+        else if(curTime >= 12 && curTime < 16) {
+            time.push('afternoon');
+        }
+        else {
+            time.push('evening');
+        }
+        let display = {};
+        display['username'] = req.session.username;
+        display['time'] = time[0];
+        res.render('patient-home', {display: display});
+    });
 })
 
 app.get('/patient_appointment', (req, res) => {
