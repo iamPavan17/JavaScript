@@ -195,7 +195,9 @@ app.post('/patientlogin', (req, res) => {
         if(count > 0) {
             req.session.loggedin = true;
             req.session.username = data.username;
-            res.render('patient-home');
+            let display = {};
+            display['username'] = req.session.username;
+            res.render('patient-home', {display: display});
         }
         else {
             res.render('patient_login', {error: 'Username/Password is Incoorect!!'});
@@ -203,6 +205,19 @@ app.post('/patientlogin', (req, res) => {
     })
 });
 
+app.get('/patient_home', (req, res) => {
+    let display = {};
+    display['username'] = req.session.username;
+    res.render('patient-home', {display: display});
+})
+
+app.get('/patient_appointment', (req, res) => {
+    res.render('patient_appointment');
+});
+
+app.get('/insurance_claim', (req, res) => {
+    res.render('insurance_claim');
+})
 
 //Patient request
 app.post('/patient', (req, res) => {
@@ -589,11 +604,109 @@ app.post('/patient', (req, res) => {
     }    
 });
 
+app.get('/forgotPassword', (req, res) => {
+    res.render('forgot_password');
+})
 //
 app.get('/logout', (req, res) => {
     res.redirect('/');
     req.session.destroy();
 });
+
+//forgot password
+
+//OTP
+function messageOTP(messageBody) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+
+    req.query({
+    "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
+    "sender_id": "FSTSMS",
+    "message": `Your code is ${messageBody.Code}.`,
+    "language": "english",
+    "route": "p",
+    "numbers": messageBody.phone,
+    });
+
+    req.headers({
+    "cache-control": "no-cache"
+    });
+
+
+    req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+
+    console.log(res.body);
+    });
+}
+
+app.post('/forgot1', (req, res) => {
+    let data = {
+        phone: req.body.phone
+    };
+    let sql = `SELECT * FROM patient WHERE phone = ${data.phone}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        let dbResult = result[0];
+        let dbData = {};
+        for(var i in dbResult) {
+            dbData[i] = dbResult[i];
+        }
+        if(result.length) {
+            // console.log('found')
+            // console.log(dbData);
+            // messageOTP(dbData);
+            let query1 = db.query('SELECT uuid()', (err, result) => {
+                if(err) throw err;
+                dbData['Code'] = result[0]['uuid()'].slice(0,4);
+                req.session.phoneNumber = data.phone;
+                req.session.code = dbData['Code'];
+                messageOTP(dbData);
+                res.render('forgot_password1', {phone: req.session.phoneNumber});    
+            });
+        }
+        else{
+            res.render('forgot_password', {error: 'Phone number not found!!!'})
+        }
+    });
+});
+
+app.post('/forgot2', (req, res) => {
+    let data = {
+        code: req.body.code,
+        password1: req.body.password1,
+        password2: req.body.password2
+    }
+    if(data.password1 !== data.password2) {
+        res.render('forgot_password1', {error: 'Passwords are not matching!'});
+    } 
+    else if(data.code !== req.session.code) {
+        res.render('forgot_password1', {codeerror: 'Code is not correct!'})
+    } 
+    else {
+        let query = db.query(`UPDATE patient SET password = '${data.password1}' WHERE phone = ${req.session.phoneNumber}`, (err, result) => {
+            if(err) throw err;
+            res.send(
+                `
+                    <html>
+                        Password has been updated successfully.
+                        <a href='/patientlogin'>Click here to login</a>
+                    </html
+                `
+            )
+        })
+    }
+})
+
+app.get('/forgot_password', (req, res) => {
+    res.render('forgot_password');
+})
+app.get('/forgot_password1', (req, res) => {
+    res.render('forgot_password1');
+})
 
 app.listen(3002, () => {
     console.log('Server running on port 3002...');
