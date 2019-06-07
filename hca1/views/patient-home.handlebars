@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <title>Patient Home</title>
 </head>
 <body>
@@ -37,38 +38,22 @@
                     <a class="nav-item nav-link" href="/logout"><span  style="color: rgb(88, 90, 228)">Logout</span></a>
                 </span>
         </nav>
+        <br><br><br>
+        <div class="text-center container">
+            <h4 style="font-family: 'Open Sans', sans-serif;">Good {{display.time}} {{display.username}}!</h4>
+        </div>
 
+        <div class="container p-5">
+                <p style="color: rgb(230, 114, 133); font-size: 14px;"><b>Ask Virtual doctor</b></p>
+                
+                <h2 style="color: rgb(49, 49, 141); font-size: 71px;">Babylon understands symptoms you enter and provides you with relevant health and triage information</h2>   <br>
+                <button type="button" onclick="location.href='http://127.0.0.1:3005/'" class="btn btn-info btn-lg" style="border-radius: 50px;">Ask Virtual Doctor</button>
+        </div>
 
-    {{!-- <div class="container pt-5">
-        <h2>Patient Appointment Booking</h2><br><br>
-        <div class="container">
-            <form method="post" action="patient">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                <label for="inputname">Name</label>
-                <input type="text" class="form-control" id="inputname" placeholder="Name" name="name" >
-                </div>
-                <div class="form-group col-md-6">
-                <label for="Email">Email</label>
-                <input type="email" class="form-control" id="Email" placeholder="Email" name="email" >
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                <label for="phone">Phone</label>
-                <input type="text" class="form-control" id="phone" placeholder="Phone no." name="phone" >
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">What symptom is bothering you the most?</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter question for you or someone else. For e.g. I am 25 year old and have backache for last 2 months." name="problem" ></textarea>
-            </div>
-            <button type="submit" class="btn btn-outline-primary"> Submit </button>
-            </form>
-        </div> --}}
-    </div> <br><br><br><br>
-    <div class="text center" align="center">
+<div class="text center" align="center">
             <span style="color: rgb(91, 81, 226);">Made with</span> &nbsp;<img src="https://www.babylonhealth.com/assets/images/header/babylon-health-logo-mobile.png" width="32" height="29"  alt="">
         </div>
+    </div>
+    
 </body>
 </html>
