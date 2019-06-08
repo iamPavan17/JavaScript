@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Event</title>
+<link rel="stylesheet" href="../public/css/users_home_artist/bootstrap.min.css">
+<link rel="stylesheet" href="../public/css/users_home_artist/font-awesome.min.css">
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+<!-- Main css -->
+<link rel="stylesheet" href="../public/css/users_home_artist/style.css">
+<link href="https://fonts.googleapis.com/css?family=Lora|Merriweather:300,400" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- PRE LOADER -->
+
+<div class="preloader">
+     <div class="sk-spinner sk-spinner-wordpress">
+          <span class="sk-inner-circle"></span>
+     </div>
+</div>
+
+<!-- Navigation section  -->
+
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+     <div class="container">
+
+          <div class="navbar-header">
+               <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+               </button>
+               <a href="" class="navbar-brand">JAMS</a>
+          </div>
+          <div class="collapse navbar-collapse">
+               <ul class="nav navbar-nav navbar-center">
+                    <li class="active"><a href="/admin_home_artist_info">Home</a></li>
+                    <li><a href="/admin_home_artist_info_performance">Performance</a></li>
+                    <li><a href="/admin_home_artist_info_training">Training</a></li> 
+                    <li class=""><a href="/admin_home_artist_info_schedule">Schedule</a></li>
+                    <li class=""><a href="/admin_home_artist_info_myartist">My Artist</a></li>
+               </ul>
+               <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/admin_home_viewusers"><i style="font-size: 13px;"><i class='fas fa-arrow-left'></i> Back to HOME</i></a></li> 
+               </ul>
+          </div>
+
+  </div>
+</div>
+
+<!-- Home Section -->
+
+<section id="home" class="main-home parallax-section">
+     <div class="overlay"></div>
+     <div id="particles-js"></div>
+     <div class="container">
+          <div class="row">
+               <div class="col-md-12 col-sm-12">{{#each display}}
+                    <h1>Hello! This is {{this.username}}.</h1>{{/each}}
+                    <h4>Discover more about me</h4>
+                    <a href="#b" class="smoothScroll btn btn-default"><i class='fas fa-angle-double-down' style='font-size:21px'></i></a>
+               </div>
+
+          </div>
+     </div>
+</section>
+
+<!-- Blog Section -->
+
+<section id="asdb">
+     <div class="container" id="b">
+          <div class="row">
+               <div class="col-md-offset-1 col-md-10 col-sm-12">
+                    <div class="blog-post-thumb">
+                         
+                         <div class="blog-post-title">
+                              <h3><a href="#">About me</a></h3>
+                         </div>
+                        {{#each display}}
+                        <div class="container p-5">
+                        <div class="blog-post-des">
+                              <p>{{this.about}}.</p>
+                         </div>{{/each}}
+                        </div>
+                         
+                    </div>
+               </div>
+          </div>
+     </div>
+</section>
+
+<!-- Footer Section -->
+
+<footer>
+     <div class="container">
+          <div class="row">
+               <div class="col-md-12 col-sm-12" align="center">
+                    Copyright © 2019, Event Management. All rights reserved.
+               </div> 
+               
+          </div>
+     </div>
+</footer>
+
+<!-- Back top -->
+<a href="#back-top" class="go-top"><i class="fa fa-angle-up"></i></a>
+
+<!-- SCRIPTS -->
+
+<script src="../public/js/users_home_artist/jquery.js"></script>
+<script src="../public/js/users_home_artist/bootstrap.min.js"></script>
+<script src="../public/js/users_home_artist/particles.min.js"></script>
+<script src="../public/js/users_home_artist/app.js"></script>
+<script src="../public/js/users_home_artist/jquery.parallax.js"></script>
+<script src="../public/js/users_home_artist/smoothscroll.js"></script>
+<script src="../public/js/users_home_artist/custom.js"></script>
+</body>
+</html>
