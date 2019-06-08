@@ -144,7 +144,7 @@ function appointmentMessageAccept(messageBody) {
     req.query({
     "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
     "sender_id": "FSTSMS",
-    "message": `Dear ${messageBody.user_name}, ${messageBody.artistname}, has accepted to your Appointment request.`,
+    "message": `Dear ${messageBody.user_name}, ${messageBody.artist_name}, has accepted to your Appointment request.`,
     "language": "english",
     "route": "p",
     "numbers": messageBody.user_phone,
@@ -169,7 +169,7 @@ function appointmentMessageReject(messageBody) {
     req.query({
     "authorization": "j4qN5V68iwZp7ScGLEyoUFduJ3kCtTrQAhIMsx1l2afWnOKeYD5ciXK1swQSL2WvkYaCquRA8gd0ZIoH",
     "sender_id": "FSTSMS",
-    "message": `Dear ${messageBody.user_name}, ${messageBody.artistname}, has rejected to your Appointment request.`,
+    "message": `Dear ${messageBody.user_name}, ${messageBody.artist_name}, has rejected to your Appointment request.`,
     "language": "english",
     "route": "p",
     "numbers": messageBody.user_phone,
@@ -204,7 +204,7 @@ app.post('/appointmentAccept', (req, res) => {
         let query2 = db.query(`DELETE FROM artist_appointment WHERE id = ${data.id}`, (err, result) => {
             if(err) throw err;
         });
-        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artistname}', '${data.status}', '${data.message}')`, (err, result) => {
+        let query3 = db.query(`INSERT INTO appointment_history(user_name, user_phone, user_date, artist_name, status, reason) VALUES('${appData.user_name}', '${appData.user_phone}', '${appData.user_date}', '${appData.artist_name}', '${data.status}', '${data.message}')`, (err, result) => {
             if(err) throw err;
             appointmentMessageAccept(appData);
             res.redirect('artist_home_appointment');
@@ -750,6 +750,33 @@ app.get('/users_home_artist_info', (req, res) => {
     });
 });
 
+app.get('/admin_home_artist_info', (req, res) => {
+    let sql = `SELECT * FROM new_artist WHERE id = ${req.session.artistId}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // // console.log(result)
+        // req.session.artistName = result[0].username;
+        // req.session.artistId = data.id;
+        res.render('admin_home_artist_info', {display: result});
+    });
+});
+
+
+
+app.post('/admin_home_artist_info', (req, res) => {
+    let data = {
+        id: req.body.id
+    };
+    let sql = `SELECT * FROM new_artist WHERE id = ${data.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        req.session.artistName = result[0].username;
+        req.session.artistId = data.id;
+        req.session.artistPhone = result[0].phone;
+        res.render('admin_home_artist_info', {display: result});
+    })
+})
+
 app.post('/users_home_artist_info', (req, res) => {
     let data = {
         id: req.body.id
@@ -774,6 +801,15 @@ app.get('/users_home_artist_info_training', (req, res) => {
     });
 });
 
+app.get('/admin_home_artist_info_training', (req, res) => {
+    let sql = `SELECT * FROM artist_training WHERE username = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('admin_home_artist_info_training', {display: result})
+    });
+});
+
 app.get('/users_home_artist_info_schedule', (req, res) => {
     let sql = `SELECT * FROM artist_schedule WHERE artist_name = '${req.session.artistName}'`;
     let query = db.query(sql, (err, result) => {
@@ -781,7 +817,25 @@ app.get('/users_home_artist_info_schedule', (req, res) => {
         // console.log(result)
         res.render('users_home_artist_info_schedule', {display: result})
     });
+});
+
+app.get('/admin_home_artist_info_myartist', (req, res) => {
+    let sql = `SELECT * FROM invite_artist2 WHERE super_user = '${req.session.artistName}' AND status = 'accepted'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('admin_home_artist_info_myartist', {display: result})
+    });
 })
+
+app.get('/admin_home_artist_info_schedule', (req, res) => {
+    let sql = `SELECT * FROM artist_schedule WHERE artist_name = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('admin_home_artist_info_schedule', {display: result})
+    });
+});
 
 app.get('/users_home_artist_info_performance', (req, res) => {
     let sql = `SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.artistName}'`;
@@ -790,7 +844,16 @@ app.get('/users_home_artist_info_performance', (req, res) => {
         // console.log(result)
         res.render('users_home_artist_info_performance', {display: result})
     });
-})
+});
+
+app.get('/admin_home_artist_info_performance', (req, res) => {
+    let sql = `SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        res.render('admin_home_artist_info_performance', {display: result})
+    });
+});
 
 app.post('/users_home_artist_info2', (req, res) => {
     let data = {
@@ -1118,6 +1181,25 @@ app.post('/artistreg', (req, res) => {
         }
     })
 });
+
+app.get('/viewUsers', (req, res) => {
+    let sql = 'SELECT * FROM new_artist';
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        let query1 = db.query(sql, (err, result) => {
+            if(err) throw err;
+            var superUser = result;
+            let query2 = db.query('SELECT * FROM users', (err, result) => {
+                if(err) throw err;
+                res.render('admin_home_viewusers', {superUser: superUser, users: result});
+            })   
+        })    
+    });    
+}); 
+
+app.get('/admin_home_viewusers', (req, res) => {
+    res.redirect('/viewUsers');
+})
 
 app.listen(3000, () => {
     console.log('Server running on port 3000...');
