@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Artist Training</title>
+    <title>Artist Awards</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -33,14 +33,14 @@
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_schedule">Schedule</a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/norartist_home_training">Training <span class="sr-only">(current)</span></a>
+          <li class="nav-item pl-2">
+            <a class="nav-link" href="/norartist_home_training">Training </a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_appointment">Appointment</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/norartist_home_awards">Awards</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/norartist_home_awards">Awards <span class="sr-only">(current)</span></a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -49,52 +49,23 @@
       </div>
     </nav>
 
-    <form class='container pt-4' method="POST" action="norartist_home_training">
-      <h3>Create Training</h3>
+    <form class='container pt-4' method="POST" action="norartist_home_award">
+      <h3>Enter the Awards</h3>
          <div class="row">
             <div class="form-group col-6">
-              Timings: <input type="text" name="timings" id="" class="form-control" >
-            </div>
-            <div class="form-group col-6">
-              Address: <input type="text" name="address" id="" class="form-control" >
-            </div>
-            <div class="form-group col-6">
-              Batches: <select name="batches" id="" class="form-control" >
-                  <option value="morning">Morning</option>
-                  <option value="evening">Evening</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              Contact: <input type="text" name="contact" id="" class="form-control" >
+              <input type="text" name="award" id="" class="form-control" >
             </div>
          </div>
         <input type="submit" value="SUBMIT" class="btn btn-outline-primary">
     </form>
 
     <div class="container pt-5">
-            <h3>Training</h3><br>
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Timings</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Batches</th>
-                        <th scope="col">Contact</th>
-                        {{!-- <th scope="col">Status</th> --}}
-                    </tr>
-                </thead>
-                <tbody>{{#each display}}
-                        <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.timings}}</td>
-                            <td>{{this.address}}</td>
-                            <td>{{this.batches}}</td>
-                            <td>{{this.contact}}</td>
-                            {{!-- <td>{{this.status}}</td> --}}
-                        </tr>{{/each}}
-                </tbody>
-            </table>
+            <h3>Awards</h3><br>
+            <ul>
+              {{#each display}}
+                  <li>{{this.awards}}</li>
+              {{/each}}
+            </ul>
         </div> 
 
 </body>

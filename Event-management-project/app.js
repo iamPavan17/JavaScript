@@ -314,6 +314,24 @@ app.get('/norartist_home_training', (req, res) => {
     })
 });
 
+app.post('/norartist_home_award', (req, res) => {
+    let data = {
+        award: req.body.award
+    };
+    let query = db.query(`INSERT INTO artist_awards(awards, artist_name) VALUES('${data.award}', '${req.session.username}')`, (err, result) => {
+        result['username'] = req.session.username;
+        res.render('norartist_home_awards', {display: result});
+    });
+});
+
+app.get('/norartist_home_awards', (req, res) => {
+    let query = db.query(`SELECT * FROM artist_awards WHERE artist_name = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        result['username'] = req.session.username;
+        res.render('norartist_home_awards', {display: result});
+    });
+});
+
 app.post('/userreg', (req, res) => {
     let data = {
         name: req.body.username,
@@ -761,7 +779,16 @@ app.get('/admin_home_artist_info', (req, res) => {
     });
 });
 
-
+app.get('/users_home_artist_info_awards', (req, res) => {
+    let sql = `SELECT * FROM artist_awards WHERE artist_name = '${req.session.artistName}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(sql);
+        // console.log(req.session.artistName)
+        // console.log(result);
+        res.render('users_home_artist_info_awards', {display: result});
+    });
+});
 
 app.post('/admin_home_artist_info', (req, res) => {
     let data = {
