@@ -4,6 +4,19 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
 const mysql = require('mysql');
+const multer = require('multer');
+
+const DIR = './uploads';
+let storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, DIR);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+ 
+let upload = multer({storage: storage});
 
 const app = express();
 
@@ -157,7 +170,16 @@ app.post('/patientreg', (req, res) => {
                 }
                 // console.log(count);
                 if(count > 0) {
-                    res.render('patient_reg', {username: 'Username is already taken!!!'});
+                    let usernameGenQuery = db.query('SELECT uuid()', (err, result) => {
+                        if(err) throw err;
+                        let code = String(result[0]['uuid()'].slice(2,7));
+                        let numb = code.match(/\d/g);
+                        numb = numb.join("");
+                        // console.log(`${data.username}${numb.slice(-5, -1)}`);
+                        var avaUsernames = `${data.username}${numb.slice(-5, -1)}`;
+                        // console.log(avaUsernames); 
+                        res.render('patient_reg', {username: `OOPS!!!, Username is already taken, You can try`, suguser: `${data.username}${code}`});       
+                    });
                 }
                 else {
                     let sql = 'INSERT INTO patient SET ?';
@@ -248,10 +270,6 @@ app.get('/patient_home', (req, res) => {
 app.get('/patient_appointment', (req, res) => {
     res.render('patient_appointment');
 });
-
-app.get('/insurance_claim', (req, res) => {
-    res.render('insurance_claim');
-})
 
 //Patient request
 app.post('/patient', (req, res) => {
@@ -733,7 +751,62 @@ app.post('/forgot2', (req, res) => {
             )
         })
     }
-})
+});
+
+
+app.get('/insurance_claim', (req, res) => {
+    let query2 = db.query(`SELECT * FROM patient_insurance WHERE username = '${req.session.username}'`, (err, result) => {
+        if(err) throw err;
+        // console.log(result)
+        // console.log(filterdDate.slice(0,15))
+        if(result.length){
+            let filterdDate = String(result[0].uploaded_date);
+        result[0].uploaded_date = filterdDate.slice(0,15);}
+        // console.log(result['filteredDate'])
+        res.render('insurance_claim', {result: result});
+    });
+});
+
+app.post('/viewPdf', (req, res) => {
+    let data = {
+        pdfFile: req.body.pdfFile
+    };
+    res.sendFile(__dirname + `/uploads/${data.pdfFile}`)
+});
+
+app.post('/upload',upload.single('insfile'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = 'Error!!! in file upload.';
+        res.render('insurance_claim', {message: message});
+    }
+    else if(req.file.mimetype !== 'application/pdf'){
+        res.render('insurance_claim', {message: 'File is not in PDF format!!'});
+    }
+    else {
+        console.log('File received');
+        // console.log(req);
+        let query3 = db.query(`DELETE FROM patient_insurance WHERE username = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+        });
+        let sql = `INSERT INTO patient_insurance(username, name, type, size, uploaded_date) VALUES('${req.session.username}', '${req.file.filename}', '${req.file.mimetype}', ${req.file.size}, CURRENT_DATE)`;
+        // console.log(sql);
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+        });
+        let query2 = db.query(`SELECT * FROM patient_insurance WHERE username = '${req.session.username}'`, (err, result) => {
+            if(err) throw err;
+            message = "Successfully uploaded!!!";
+            let filterdDate = String(result[0].uploaded_date);
+            // console.log(filterdDate.slice(0,15))
+            result[0].uploaded_date = filterdDate.slice(0,15);
+            // console.log(result['filteredDate'])
+            res.render('insurance_claim', {message: message, result: result});
+        });
+    }   
+});
+
+
 
 app.get('/forgot_password', (req, res) => {
     res.render('forgot_password');

@@ -41,16 +41,44 @@
     <div class="container pt-5">
         <h2 class="text-center">Upload your insurance document</h2><br><br>
         <div class="container">
-            <form method="post" action="patient">
+            <form method="POST" action="upload" enctype="multipart/form-data">
             <div class="form-row col-6" style="margin-left: 26%;">
                 <div class="input-group mb-3">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insfile" accept="">
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
                 </div>
-            <button type="submit" class="btn btn-outline-primary"> Submit </button>
+            <button type="submit" class="btn btn-outline-primary" name="submit1"> Submit </button>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
             </form>
+        </div>
+        
+        <div class="container col-7 p-5">
+            <table class="table ">
+                <thead class="thead-info">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Uploaded Date</th>
+                        <th></th>
+                        {{!-- <th scope="col">Contact</th> --}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each result}}
+                        <tr>
+                            <td>{{this.name}}</td>
+                            <td>{{this.size}}</td>
+                            <td>{{this.uploaded_date}}</td>
+                            <td><form method="POST" action="viewPdf">
+                                <input type="text" name="pdfFile" id="" value={{this.name}} hidden>
+                                <button type="submit" class="btn btn-link" name="submit2">View</button>
+                            </form></td>
+                            {{!-- <td>{{this.contact}}</td> --}}
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         </div>
     </div> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <div class="text center" align="center">
