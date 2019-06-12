@@ -5,6 +5,9 @@ const session = require('express-session');
 const path = require('path');
 const mysql = require('mysql');
 const multer = require('multer');
+var API_KEY = '0faaaa562d6852fa9d043e5d29be6685-7caa9475-649f30cb';
+var DOMAIN = 'sandbox544685825415435f8b1a3cacd58da3cf.mailgun.org';
+var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 
 const DIR = './uploads';
 let storage = multer.diskStorage({
@@ -780,16 +783,16 @@ app.post('/upload',upload.single('insfile'), (req, res) => {
         message = 'Error!!! in file upload.';
         res.render('insurance_claim', {message: message});
     }
-    else if(req.file.mimetype !== 'application/pdf'){
-        res.render('insurance_claim', {message: 'File is not in PDF format!!'});
-    }
+    // else if(req.file.mimetype !== 'application/pdf'){
+    //     res.render('insurance_claim', {message: 'File is not in PDF format!!'});
+    // }
     else {
         console.log('File received');
         // console.log(req);
         let query3 = db.query(`DELETE FROM patient_insurance WHERE username = '${req.session.username}'`, (err, result) => {
             if(err) throw err;
         });
-        let sql = `INSERT INTO patient_insurance(username, name, type, size, uploaded_date) VALUES('${req.session.username}', '${req.file.filename}', '${req.file.mimetype}', ${req.file.size}, CURRENT_DATE)`;
+        let sql = `INSERT INTO patient_insurance(username, name, type, size, uploaded_date, cause) VALUES('${req.session.username}', '${req.file.filename}', '${req.file.mimetype}', ${req.file.size}, CURRENT_DATE, '${req.body.cause}')`;
         // console.log(sql);
         let query = db.query(sql, (err, result) => {
             if(err) throw err;
@@ -806,7 +809,42 @@ app.post('/upload',upload.single('insfile'), (req, res) => {
     }   
 });
 
+//sending mail
+app.get('/admin', (req, res) => {
+    res.render('mail');
+});
 
+app.post('/sendmail', (req, res) => {
+
+    let query = db.query(`SELECT * FROM patient_insurance WHERE username = '${req.body.name}'`, (err, result) => {
+        if(err) throw err;
+        var filepath = path.join(__dirname, `/uploads/${result[0]['name']}`);
+        const data = {
+            from: 'HealthCareAuto <iampavan05@gmail.com>',
+            to: req.body.email,  //req.body.email
+            subject: 'Health Insurance Claim',
+            text: `
+            Hello,
+    
+            This is to intimate Mr./Ms./Mrs. ${req.body.name} has been admitted for treatment / surgery of ${result[0]['cause']}.
+            
+            I am attaching herewith the scanned copy of the insurance document.
+            
+            Looking forward to your kind cooperation.`,
+            attachment: filepath
+          };
+      
+          mailgun.messages().send(data, (error, body) => {
+              if(error) {
+                  console.log(error); 
+                  res.render('mail', {msg: "Got Some Error!!!"})
+              }
+            console.log(body);
+      
+            res.render('mail', {msg: "Email has been sent"});
+          }); 
+    });
+})
 
 app.get('/forgot_password', (req, res) => {
     res.render('forgot_password');

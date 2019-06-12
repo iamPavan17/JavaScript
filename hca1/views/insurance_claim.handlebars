@@ -49,7 +49,13 @@
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
                 </div>
-            <button type="submit" class="btn btn-outline-primary" name="submit1"> Submit </button>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
+                <div class="form-row col-12">
+                  <label for="s">Cause</label>
+                  <input type="text" class="form-control" id="s" name="cause" required>
+                </div>
+                <div class="form-group col-6 pt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="submit1"> Submit </button>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
+                </div>
             </form>
         </div>
         
@@ -60,6 +66,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Size</th>
                         <th scope="col">Uploaded Date</th>
+                        <th scope="col">Cause</th>
                         <th></th>
                         {{!-- <th scope="col">Contact</th> --}}
                     </tr>
@@ -70,11 +77,11 @@
                             <td>{{this.name}}</td>
                             <td>{{this.size}}</td>
                             <td>{{this.uploaded_date}}</td>
+                            <td>{{this.cause}}</td>
                             <td><form method="POST" action="viewPdf">
                                 <input type="text" name="pdfFile" id="" value={{this.name}} hidden>
                                 <button type="submit" class="btn btn-link" name="submit2">View</button>
                             </form></td>
-                            {{!-- <td>{{this.contact}}</td> --}}
                         </tr>
                     {{/each}}
                 </tbody>
