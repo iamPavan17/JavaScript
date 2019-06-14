@@ -5,6 +5,19 @@ const path = require('path');
 const mysql = require('mysql');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
+const multer = require('multer');
+
+const DIR = './uploads';
+let storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, DIR);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+ 
+let upload = multer({storage: storage});
 
 const app = express();
 
@@ -790,6 +803,32 @@ app.get('/users_home_artist_info_awards', (req, res) => {
     });
 });
 
+app.get('/artist_home_gallery', (req, res) => {
+    res.render('artist_home_gallery');
+});
+
+app.post('/upload',upload.single('insimage'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = "Error!!! in file upload.";
+        res.render('artist_home_gallery', {message: message});
+    }
+    else if(req.file.mimetype !== 'image/jpeg' || req.file.mimetype !== 'image/png') {
+        res.render('artist_home_gallery', {message: 'File is not in proper format!!'});
+    }
+    else {
+        console.log('File received');
+        let sql = `INSERT INTO images(artist_name, image_name, type, uploaded_date, caption) VALUES('${req.body.caption}')`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            message = "Successfully uploaded!!!";
+            let filteredDate = String(result[0].uploaded_date);
+            result[0].uploaded_date = filteredDate.slice(0,15);
+            res.render('artist_home_gallery', {message: message});
+        });
+    }
+});
+
 app.post('/admin_home_artist_info', (req, res) => {
     let data = {
         id: req.body.id
@@ -1226,7 +1265,7 @@ app.get('/viewUsers', (req, res) => {
 
 app.get('/admin_home_viewusers', (req, res) => {
     res.redirect('/viewUsers');
-})
+});
 
 app.listen(3000, () => {
     console.log('Server running on port 3000...');

@@ -29,8 +29,8 @@
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_performance">Performance list</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_gallery">Gallery</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/artist_home_gallery">Gallery <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_schedule">Schedule</a>
@@ -44,8 +44,8 @@
            <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_list_artist">List of Accepted or Pending Artists</a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/artist_home_appointment">Appointment  <span class="sr-only">(current)</span></a>
+          <li class="nav-item pl-2">
+            <a class="nav-link" href="/artist_home_appointment">Appointment  </a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/artist_home_reset_password">Reset Password</a>
@@ -80,48 +80,25 @@
     </form> --}}
 
     <div class="container pt-5">
-            <h3>Appointment Request</h3><br>
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Reply</th>
-                    </tr>
-                </thead>
-                <tbody>{{#each display}}
-                        <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.user_name}}</td>
-                            <td>{{this.user_email}}</td>
-                            <td>{{this.user_phone}}</td>
-                            <td>{{this.user_date}}</td>
-                            <td>{{this.user_time}} {{this.user_format}}</td>
-                            <td>{{this.user_message}}</td>
-                            <td>
-                                <form method="POST" action="appointmentAccept">
-                                    <input type="text" value={{this.id}} name="id" hidden>
-                                    <input type="text" name="status" value="accept" id="" hidden>
-                                    <a href=""><input type="submit" value="Accept" class="btn btn-link"></a><i class='far fa-check-circle'></i>
-                                </form>
-                                <form method="POST" action="appointmentReject">
-                                    <input type="text" value={{this.id}} name="id" hidden>
-                                    <input type="text" name="status" value="reject" id="" hidden>
-                                    <input type="text" name="message" id="" class="form-control" placeholder="Message for Rejection">
-                                    <a href=""><input type="submit" value="Reject" class="btn btn-link"></a><i class='far fa-times-circle'></i>
-                                </form>
-                            </td>
-                        </tr>{{/each}}
-                </tbody>
-            </table>
-        </div> 
-        <div class="container pt-5">
-          <a href="/artist_home_appointment_history"><i>Appointment History </i></a><i class='fas fa-glasses'></i>
-        </div>
+        <h2 class="text-center">Upload image</h2><br><br>
+        <div class="container">
+            <form method="POST" action="upload" enctype="multipart/form-data">
+            <div class="form-row col-6" style="margin-left: 26%;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insimage" accept="">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+                    </div>
+                </div>
+                <div class="form-row col-12">
+                  <label for="s">Caption</label>
+                  <input type="text" class="form-control" id="s" name="caption" required>
+                </div>
+                <div class="form-group col-6 pt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="submit"> Submit </button>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
+                </div>
+            </form>       
+    </div> 
+      
 </body>
 </html>
