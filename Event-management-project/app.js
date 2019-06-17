@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const multer = require('multer');
-const DIR = './uploads';
+const DIR = './public/img';
 
 const app = express();
 
@@ -804,6 +804,15 @@ app.get('/users_home_artist_info_awards', (req, res) => {
     });
 });
 
+app.get('/viewGallery', (req, res) => {
+    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.username}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        console.log(result);
+        res.render('artist_home_view_gallery', {display: result});
+    });   
+});
+
 app.get('/artist_home_gallery', (req, res) => {
     res.render('artist_home_gallery');
 });
@@ -832,6 +841,35 @@ app.post('/upload', upload.single('insimage'), (req, res) => {
         });
     }
 });
+
+app.get('/addQuestions', (req, res) => {
+    let query = db.query(`SELECT * FROM questions`, (err, result) => {
+        if(err) throw err;
+        res.render('admin_home_addQuestion', {display: result});
+    })
+});
+
+app.post('/addQuestion', (req, res) => {
+    let data = {
+        question: req.body.question
+    }
+    let sql = 'INSERT INTO questions SET ?';
+    let query = db.query(sql, data, (err, result) => {
+        if(err) throw err;
+        res.redirect('addQuestions');
+    });
+});
+
+app.post('/removeQuestion', (req, res) => {
+    let data = {
+        questionId: req.body.questionid
+    };
+    let query = db.query(`DELETE FROM questions WHERE id = ${data.questionId}`, (err, result) => {
+        if(err) throw err;
+        res.redirect('addQuestions');
+    })
+})
+
 
 app.post('/admin_home_artist_info', (req, res) => {
     let data = {

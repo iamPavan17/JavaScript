@@ -42,7 +42,7 @@
                 Actions
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Invite Artist</a>
+                <a class="dropdown-item" href="/inviteartist">Invite Artist</a>
                 <a class="dropdown-item" href="/listartist">List Artist</a>
                 <a class="dropdown-item" href="/listaccartist">List Accepted Artist</a>
                 <a class="dropdown-item" href="/viewUsers">View Users</a>
@@ -60,34 +60,53 @@
     </nav>
     <div class="container pt-5">
         <div class="container pt-4">
-            <h3>Invite Artist</h3><br>
-            <form class="p-3" action="inviteartist" method="POST">
-                
+            <h3>Create a question</h3><br>
+            <form class="p-3" action="addQuestion" method="POST">
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                    <label for="inputEmail4">Name</label>
-                    <input type="text" class="form-control" id="inputEmail4" placeholder="Enter name" name="name">
-                    </div>
-                    <div class="form-group col-md-4">
-                    <label for="inputPassword4">Email</label>
-                    <input type="email" class="form-control" id="inputPassword4" placeholder="Enter email" name="email">
+                    <div class="form-group col-md-6">
+                    <label for="inputEmail4">Question</label>
+                    <textarea class="form-control" id="inputEmail4" placeholder="Enter a question" name="question" cols="5" rows="5"></textarea>
                     </div>
                 </div>
-                <div class="form-row">
-                   <div class="form-group col-md-4">
-                    <label for="inputPassword">Phone</label>
-                    <input type="text" class="form-control" id="inputPassword" placeholder="Enter phone" name="phone">
-                    </div>
-                    {{!-- <div class="form-group col-md-2">
-                    <label for="inputZip">Code</label>
-                    <input type="text" class="form-control" id="inputZip" placeholder="Enter code" name="code">
-                    </div> --}}
-                </div>
-                <button type="submit" class="btn btn-outline-primary">Send invite</button> <span class="animated fadeInRight">{{message}}</span>
+                <button type="submit" class="btn btn-outline-dark">Add</button> <span class="animated fadeInRight">{{message}}</span>
             </form>
         </div>
-        <br>
+        <br><br>
+
+        <table class="table" id="myTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Question</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each display}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.question}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <br>
+
+            <div class="container pt-4">
+            <form action="removeQuestion" method="POST">
+                <div class="row">
+                <div class="form-group col-md-3">
+                <select class="custom-select mr-sm-3" id="inlineFormCustomSelect" name="questionid">
+                    <option selected>Choose question ID</option>
+                    {{#each display}}
+                        <option value={{this.id}}>{{this.id}}</option>
+                    {{/each}}
+                </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Remove</button>
+            </form>
+        </div><br><br>
         <div class="text-centre container" style="background-color:black; width: 180px; height: 1px;"></div>
-    </div>
+    </div><br>
 </body>
 </html>
