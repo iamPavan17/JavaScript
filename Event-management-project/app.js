@@ -6,18 +6,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const multer = require('multer');
-
 const DIR = './uploads';
-let storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-      callback(null, DIR);
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
- 
-let upload = multer({storage: storage});
 
 const app = express();
 
@@ -43,7 +32,19 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
-app.use(fileUpload());
+// app.use(fileUpload());
+
+
+let storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, DIR);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+ 
+let upload = multer({storage: storage});
 
 //Home Page
 app.get('/', (req, res) => {
@@ -807,24 +808,27 @@ app.get('/artist_home_gallery', (req, res) => {
     res.render('artist_home_gallery');
 });
 
-app.post('/upload',upload.single('insimage'), (req, res) => {
+app.post('/upload', upload.single('insimage'), (req, res) => {
     if(!req.file) {
         console.log('No file received!!');
         message = "Error!!! in file upload.";
         res.render('artist_home_gallery', {message: message});
     }
-    else if(req.file.mimetype !== 'image/jpeg' || req.file.mimetype !== 'image/png') {
+    else if(req.file.mimetype !== 'image/jpeg') {
         res.render('artist_home_gallery', {message: 'File is not in proper format!!'});
     }
     else {
         console.log('File received');
-        let sql = `INSERT INTO images(artist_name, image_name, type, uploaded_date, caption) VALUES('${req.body.caption}')`;
+        let sql = `INSERT INTO images(artist_name, image_name, type, uploaded_date, caption) VALUES('${req.session.username}','${req.file.filename}', '${req.file.mimetype}', CURRENT_DATE, '${req.body.caption}')`;
         let query = db.query(sql, (err, result) => {
             if(err) throw err;
-            message = "Successfully uploaded!!!";
-            let filteredDate = String(result[0].uploaded_date);
-            result[0].uploaded_date = filteredDate.slice(0,15);
-            res.render('artist_home_gallery', {message: message});
+            let query1 = db.query(`SELECT * FROM images WHERE artist_name = '${req.session.username}'`, (err, result) => {
+                if(err) throw err;
+                message = "Successfully uploaded!!!";
+                let filteredDate = String(result[0].uploaded_date);
+                result[0].uploaded_date = filteredDate.slice(0,15);
+                res.render('artist_home_gallery', {message: message});
+            });
         });
     }
 });
