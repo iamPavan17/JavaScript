@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Artist Home</title>
+     	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -13,8 +13,14 @@
 
 </head>
 <body>
+    {{!-- <h1>Artist Home</h1>
+    <h3>Welcome, {{display.user}} !!!</h3>
+    {{#each display}}
+    <p>{{this.badge1}}</p>
+    <p>{{this.badge2}}</p>
+    {{/each}} --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand pl-4" href="#">Welcome {{this.a_name}}!</a>
+      <a class="navbar-brand pl-4" href="#">Welcome {{username}}!</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -22,65 +28,62 @@
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home">Bio </a>
+            <a class="nav-link" href="#">Bio</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_performance">Performance list</a>
+            <a class="nav-link" href="/norartist_home_performance">Performance list</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_gallery">Gallery</a>
+            <a class="nav-link" href="#">Gallery</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_schedule">Schedule</a>
+            <a class="nav-link" href="/norartist_home_schedule">Schedule</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_training">Training</a>
+            <a class="nav-link" href="/norartist_home_training">Training</a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_invite_user">Invite Artist</a>
+            <a class="nav-link" href="/norartist_home_appointment">Appointment</a>
           </li>
-           <li class="nav-item active">
-            <a class="nav-link" href="/artist_home_list_artist">List of Accepted or Pending Artists <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_appointment">Appointment</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/norartist_home_reviews">Reviews  <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_reset_password">Reset Password</a>
-          </li><li class="nav-item pl-2">
-            <a class="nav-link" href="/artist_home_reviews">Reviews</a>
+            <a class="nav-link" href="/norartist_home_awards">Awards</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-          </ul>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a href='/logout' class="pl-3" style="color:white; font-size: 14px"><i>(Logout)</i></a>
+            </form>
       </div>
     </nav>
-    <div class="container p-5">
-        <h3>List of Artists</h3>
-            <br>
+      <div class="container pt-5">
+            <h3>List of Reviews</h3><br>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">What they like</th>
+                        <th scope="col">What they did't like</th>
+                        <th scope="col">User</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{#each display}}
+                <tbody>{{#each display}}
                         <tr>
                             <td>{{this.id}}</td>
-                            <td>{{this.a_name}}</td>
-                            <td>{{this.a_email}}</td>
-                            <td>{{this.a_phone}}</td>
-                            <td>{{this.status}}</td>
-                        </tr>
-                    {{/each}}
+                            <td>{{this.event_name}}</td>
+                            <td>{{this.stars}}</td>
+                            <td>{{this.like_message}}</td>
+                            <td>{{this.dislike_message}}</td>
+                            <td>{{this.username}}</td>
+                        </tr>{{/each}}
                 </tbody>
             </table>
-    </div>
+        </div>
 </body>
+    <script>
+      $('.toast').toast('show');
+    </script>
 </html>

@@ -90,6 +90,7 @@
                         <th scope="col">Event Name</th>
                         <th scope="col">Place</th>
                         <th scope="col">Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,7 +100,12 @@
                             <td>{{this.event_name}}</td>
                             <td>{{this.place}}</td>
                             <td>{{this.date}}</td>
-                            {{!-- <td>{{this.status}}</td> --}}
+                            <td>
+                                 <form action="review" method="POST">
+                                      <input type="text" name="perId" value={{this.id}} hidden>
+                                      <button type="submit" class="btn btn-link">Review</button>
+                                 </form>
+                            </td>
                         </tr>
                     {{/each}}
                 </tbody>

@@ -17,7 +17,7 @@
 <!-- Main css -->
 <link rel="stylesheet" href="../public/css/users_home_artist/style.css">
 <link href="https://fonts.googleapis.com/css?family=Lora|Merriweather:300,400" rel="stylesheet">
-
+<link rel="stylesheet" href="../public/css/stylesheet.css">
 </head>
 <body>
 
@@ -45,8 +45,8 @@
           <div class="collapse navbar-collapse">
                <ul class="nav navbar-nav navbar-center">
                     <li><a href="/users_home_artist_info">Home</a></li>
-                    <li ><a href="/users_home_artist_info_performance">Performance</a></li>
-                    <li class="active"><a href="/users_home_artist_info_training">Training</a></li> 
+                    <li class="active"><a href="/users_home_artist_info_performance">Performance</a></li>
+                    <li class=""><a href="/users_home_artist_info_training">Training</a></li> 
                     <li class=""><a href="/users_home_artist_info_schedule">Schedule</a></li>
                     <li class=""><a href="/users_home_artist_info_awards">Awards</a></li>
                </ul>
@@ -65,98 +65,54 @@
           <div class="row">
 
                <div class="col-md-12 col-sm-12">
-                    <h1>Training</h1>
+                    <h1>Review</h1>
 
                </div>
 
           </div>
      </div>
 </section>
-
-
-<!-- About Section -->
-
-<section id="asdb">
-     <div class="container" id="b">
-          <div class="row">
-               <div class="col-md-offset-1 col-md-10 col-sm-12">
-                    <div class="blog-post-thumb">
-                        <div class="blog-post-title">
-                              <h3><a href="">Training</a></h3>
-                         </div><br>
-                        <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Timings</th>
-                        <th scope="col">Place</th>
-                        <th scope="col">Batches</th>
-                        <th scope="col">Contact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each display}}
-                        <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.timings}}</td>
-                            <td>{{this.address}}</td>
-                            <td>{{this.batches}}</td>
-                            <td>{{this.contact}}</td>
-                        </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-                         
-                         
-                    </div>
-               </div>
-
-          </div>
-     </div>
-</section>
-
 
 <section id="contact">
-     <div class="container">
+     <div class="container p-5">
           <div class="row">
-
                <div class="col-md-offset-1 col-md-10 col-sm-12">
-                    <h4><b>Want to book an Appointment?</b></h4> <span>{{msg}}</span>
-                    <form action="sendAppointment" method="POST">
-                         <div class="col-md-4 col-sm-4">
-                              <input name="name" type="text" class="form-control" id="name" placeholder="Name" required>
+                    <h4><b>Review</b></h4> <span>{{msg}}</span>
+                    <form action="review1" method="POST">
+                        {{#each display}}
+                        <input type="text" name="artistName" hidden value={{this.artist_name}} >
+                        <input type="text" name="eventName" hidden value={{this.event_name}} >
+                        {{/each}}
+                         <div class="col-md-7 col-sm-7">
+                              <input name="eventName" type="text" class="form-control" id="name" disabled placeholder="" value={{eventName}}>
                          </div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="email" type="email" class="form-control" id="email" placeholder="Email" required>
-                      	</div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="phone" type="text" class="form-control" id="subject" placeholder="Phone" required>
-                      	</div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="date" type="date" class="form-control" id="subject" placeholder="Date" required>
-                      	</div>
-                         <div class="col-md-4 col-sm-4">
-                              <input name="time" type="number" class="form-control" id="subject" placeholder="Time" min="1" max="12" required>
-                              {{!-- <select name="" id="" class="form-control">
-                                   <option value="1">1</option>
-                                   <option value="1">1</option>
-                              </select> --}}
-                      	</div>
-                           <div class="col-md-4 col-sm-4">
-                              <select name="format" id="" class="form-control">
-                                   <option value="AM">AM</option>
-                                   <option value="PM">PM</option>
-                              </select>
-                      	</div>
-                         <div class="col-md-12 col-sm-12">
-                              <textarea name="message" rows="5" class="form-control" id="message" placeholder="Message"></textarea>
+                         <div class="col-md-6 col-sm-6">
+                              <textarea name="like" rows="5" class="form-control" id="message" placeholder="Like"></textarea>
+                         </div>
+                         <div class="col-md-6 col-sm-6">
+                              <textarea name="dislike" rows="5" class="form-control" id="message" placeholder="Dislike"></textarea>
+                         </div>
+                         <div class="col-md-10 col-sm-10">
+                             <p>
+                                <span class="starRating">
+                                    <input id="rating5" type="radio" name="rating" value="5" >
+                                    <label for="rating5">5</label>
+                                    <input id="rating4" type="radio" name="rating" value="4" >
+                                    <label for="rating4">4</label>
+                                    <input id="rating3" type="radio" name="rating" value="3" checked >
+                                    <label for="rating3">3</label>
+                                    <input id="rating2" type="radio" name="rating" value="2">
+                                    <label for="rating2">2</label>
+                                    <input id="rating1" type="radio" name="rating" value="1" >
+                                    <label for="rating1">1</label>
+                                </span>&nbsp;&nbsp;&nbsp; <span id="value">OK</span>
+                            </p>
                          </div>
                          <div class="col-md-3 col-sm-6">
                               <input name="submit" type="submit" class="form-control" id="submit" value="Send"> 
                          </div>
                     </form>
                </div>
-
           </div>
      </div>
 </section>
@@ -206,6 +162,24 @@
 <script src="../public/js/users_home_artist/jquery.parallax.js"></script>
 <script src="../public/js/users_home_artist/smoothscroll.js"></script>
 <script src="../public/js/users_home_artist/custom.js"></script>
+
+<script type="text/javascript">
+      document.getElementById('rating5').addEventListener('click', function() {
+        document.getElementById('value').innerHTML = 'Excellent';
+      });
+      document.getElementById('rating4').addEventListener('click', function() {
+        document.getElementById('value').innerHTML = 'Very Good';
+      });
+      document.getElementById('rating3').addEventListener('click', function() {
+        document.getElementById('value').innerHTML = 'OK';
+      });
+      document.getElementById('rating2').addEventListener('click', function() {
+        document.getElementById('value').innerHTML = 'Bad';
+      });
+      document.getElementById('rating1').addEventListener('click', function() {
+        document.getElementById('value').innerHTML = 'Very Bad';
+      });
+    </script>
 
 </body>
 </html>

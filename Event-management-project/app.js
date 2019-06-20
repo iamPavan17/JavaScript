@@ -427,6 +427,52 @@ app.post('/removeartist', (req, res) => {
 
 app.get('/artist_home_invite_user', (req, res) => {
     res.render('artist_home_invite_user');
+});
+
+app.post('/review', (req, res) => {
+    let data = {
+        performanceID: req.body.perId
+    };
+    let sql = `SELECT * FROM artist_performance_list WHERE id = ${data.performanceID}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result[0].event_name)
+        var eventName = result[0].event_name;
+        res.render('users_home_artist_info_review', {display: result, eventName: eventName});
+    });
+});
+
+app.post('/review1', (req, res) => {
+    let data = {
+        eventName: req.body.eventName,
+        like: req.body.like,
+        dislike: req.body.dislike,
+        artistName: req.body.artistName,
+        stars: req.body.rating
+    }
+    // console.log(data)
+    let sql = `INSERT INTO review(event_name, like_message, dislike_message, stars, artist_name, username) VALUES('${data.eventName}', '${data.like}', '${data.dislike}', '${data.stars}', '${data.artistName}', '${req.session.username}')`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.redirect('users_home_artist_info_performance');
+    });
+
+});
+
+app.get('/artist_home_reviews', (req, res) => {
+    let sql = `SELECT * FROM review WHERE artist_name = '${req.session.username}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('artist_home_reviews', {display: result, username: req.session.username});
+    })
+})
+
+app.get('/norartist_home_reviews', (req, res) => {
+    let sql = `SELECT * FROM review WHERE artist_name = '${req.session.username}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.render('norartist_home_reviews', {display: result, username: req.session.username});
+    })
 })
 
 app.get('/inviteartist', (req, res) => {
@@ -437,6 +483,7 @@ app.get('/artist_update_about', (req, res) => {
     // console.log(req.session.username)
     res.render('artist_update_about');
 });
+
 
 app.get('/artist_home_performance', (req, res) => {
     let query = db.query(`SELECT * FROM artist_performance_list WHERE artist_name = '${req.session.username}'`, (err, result) => {
