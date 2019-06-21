@@ -46,6 +46,15 @@ let storage = multer.diskStorage({
  
 let upload = multer({storage: storage});
 
+
+app.get('/home', (req, res) => {
+    let sql = 'SELECT * FROM `artist_schedule` WHERE date = CURRENT_DATE() + 1';
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        res.render('home',{display: result});
+    });
+})
 //Home Page
 app.get('/', (req, res) => {
     // let sql = 'SELECT * FROM artist_schedule WHERE date < CURDATE()';
@@ -334,7 +343,7 @@ app.post('/norartist_home_award', (req, res) => {
     };
     let query = db.query(`INSERT INTO artist_awards(awards, artist_name) VALUES('${data.award}', '${req.session.username}')`, (err, result) => {
         result['username'] = req.session.username;
-        res.render('norartist_home_awards', {display: result});
+        res.redirect('norartist_home_awards');
     });
 });
 
@@ -852,16 +861,99 @@ app.get('/users_home_artist_info_awards', (req, res) => {
 });
 
 app.get('/viewGallery', (req, res) => {
-    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.username}'`;
+    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.username}' AND type = 'image/jpeg' `;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
-        console.log(result);
+        // console.log(result);
         res.render('artist_home_view_gallery', {display: result});
     });   
 });
 
+app.get('/viewGallery1', (req, res) => {
+    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.username}' AND type = 'image/jpeg'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        res.render('norartist_home_view_gallery', {display: result});
+    });   
+});
+
+app.get('/viewGallery1vid', (req, res) => {
+    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.username}' AND type = 'video/mp4'`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        res.render('norartist_home_view_gallery_vid', {display: result});
+    });   
+});
+
+app.get('/users_home_artist_info_gallery', (req, res) => {
+    let sql = `SELECT * FROM images WHERE artist_name = '${req.session.artistName}' AND type = 'image/jpeg' `
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        // console.log(result);
+        // console.log(sql);
+        res.render('users_home_artist_info_gallery', {display: result, name: req.session.artistName});
+    });
+});
+
 app.get('/artist_home_gallery', (req, res) => {
     res.render('artist_home_gallery');
+});
+
+app.get('/norartist_home_gallery', (req, res) => {
+    res.render('norartist_home_gallery');
+});
+
+
+app.post('/upload1vid', upload.single('insimage'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = "Error!!! in file upload.";
+        res.render('norartist_home_gallery', {message1: message});
+    }
+    else if(req.file.mimetype !== 'video/mp4') {
+        res.render('norartist_home_gallery', {message1: 'File is not in proper format!!'});
+    }
+    else {
+        console.log('File received');
+        let sql = `INSERT INTO images(artist_name, image_name, type, uploaded_date, caption) VALUES('${req.session.username}','${req.file.filename}', '${req.file.mimetype}', CURRENT_DATE, '${req.body.caption}')`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            let query1 = db.query(`SELECT * FROM images WHERE artist_name = '${req.session.username}'`, (err, result) => {
+                if(err) throw err;
+                message = "Successfully uploaded!!!";
+                let filteredDate = String(result[0].uploaded_date);
+                result[0].uploaded_date = filteredDate.slice(0,15);
+                res.render('norartist_home_gallery', {message1: message});
+            });
+        });
+    }
+});
+
+app.post('/upload1', upload.single('insimage'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = "Error!!! in file upload.";
+        res.render('norartist_home_gallery', {message: message});
+    }
+    else if(req.file.mimetype !== 'image/jpeg') {
+        res.render('norartist_home_gallery', {message: 'File is not in proper format!!'});
+    }
+    else {
+        console.log('File received');
+        let sql = `INSERT INTO images(artist_name, image_name, type, uploaded_date, caption) VALUES('${req.session.username}','${req.file.filename}', '${req.file.mimetype}', CURRENT_DATE, '${req.body.caption}')`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            let query1 = db.query(`SELECT * FROM images WHERE artist_name = '${req.session.username}'`, (err, result) => {
+                if(err) throw err;
+                message = "Successfully uploaded!!!";
+                let filteredDate = String(result[0].uploaded_date);
+                result[0].uploaded_date = filteredDate.slice(0,15);
+                res.render('norartist_home_gallery', {message: message});
+            });
+        });
+    }
 });
 
 app.post('/upload', upload.single('insimage'), (req, res) => {

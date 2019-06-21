@@ -27,7 +27,7 @@
             <a class="nav-link" href="/norartist_home_performance">Performance list  <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="#">Gallery</a>
+            <a class="nav-link" href="/norartist_home_gallery">Gallery</a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_schedule">Schedule</a>
@@ -55,22 +55,22 @@
       <form method="POST" action="norartist_performance_insert">
         <div class="row">
           <div class="form-group col-6">
-          EventName: <input type="text" name="event_name" class="form-control">
+          EventName: <input type="text" name="event_name" class="form-control" required>
           </div>
         </div>
         <div class="row">
           <div class="form-group col-6">
-            Place: <input type="text" name="place" id="" class="form-control">
+            Place: <input type="text" name="place" id="" class="form-control" required>
           </div>
         </div>
         <div class="row">
           <div class="form-group col-6">       
-          date: <input type="date" name="date" class="form-control">
+          date: <input type="date" name="date" class="form-control" required>
           </div>
         </div>
         <div class="row">
         <div class="form-group col-6">       
-          image: <input type="text" value="null" name="image" class="form-control">
+          image: <input type="text" value="null" name="image" class="form-control" required>
         </div>
         </div>
           <div>

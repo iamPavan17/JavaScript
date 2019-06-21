@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Home</title>
+
+    <!-- Favicon -->
+    {{!-- <link rel="icon" href="img/core-img/favicon.ico"> --}}
+    <link rel="icon" href="../public/img/home/core-img/favicon.ico">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="../public/css/home/style.css">
+
+</head>
+
+<body>
+    <!-- ##### Preloader ##### -->
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="circle-preloader">
+            {{!-- <img src="img/core-img/compact-disc.png" alt=""> --}}
+            <img src="../public/img/home/core-img/compact-disc.png" alt="">
+        </div>
+    </div>
+
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+        <!-- Navbar Area -->
+        <div class="musica-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container-fluid">
+                    <!-- Menu -->
+                    <nav class="classy-navbar justify-content-between" id="musicaNav">
+
+                        <!-- Nav brand -->
+                        <a href="#" class="nav-brand"><!-- <img src="img/core-img/logo.png" alt=""> -->
+                            <h1 style="font-family: 'Dancing Script', cursive; color: white; font-size: 50px">JAMS</h1>
+                        </a>
+
+                        <!-- Navbar Toggler -->
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        <!-- Menu -->
+                        <div class="classy-menu">
+
+                            <!-- close btn -->
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            <!-- Nav Start -->
+                            <div class="classynav pr-5">
+                                <ul>
+                                    <li><a href="/home">Home</a></li>
+                                    <li><a href="#">About us</a></li>
+                                    <li><a href="#">Sign in</a>
+                                        <ul class="dropdown">
+                                            <li><a href="/adminlogin">Admin</a></li>
+                                            <li><a href="/artistlogin">Super user</a></li>
+                                            <li><a href="/norartistlogin">Artist</a></li>
+                                            <li><a href="/userlogin">Users</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Sign up</a>
+                                        <ul class="dropdown">
+                                            {{!-- <li><a href="/adminlogin">Admin</a></li> --}}
+                                            <li><a href="/artist_registration">Super user</a></li>
+                                            <li><a href="/norartist_registration">Artist</a></li>
+                                            <li><a href="/user_registration">Users</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    {{!-- <li><a href="concert-tours.html">Gallery</a></li>
+                                    <li><a href="contact.html">Contact</a></li> --}}
+                                </ul>
+
+                                <!-- Social Button -->
+                                {{!-- <div class="top-social-info">
+                                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                </div> --}}
+
+                            </div>
+                            <!-- Nav End -->
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <!-- ##### Hero Area Start ##### -->
+    <section class="hero-area">
+        <div class="hero-slides owl-carousel">
+
+            <!-- Single Hero Slide -->
+            <div class="single-hero-slide d-flex align-items-center justify-content-center">
+                <!-- Slide Img -->
+                <div class="slide-img bg-img" style="background-image: url(../public/img/home/bg-img/bg-1.jpg);"></div>
+                <!-- Slide Content -->
+                <div class="hero-slides-content text-center">
+                    <h2 data-animation="fadeInUp" data-delay="100ms">Music <span>Music</span></h2>
+                    <p data-animation="fadeInUp" data-delay="300ms">A Remedy</p>
+                </div>
+                <!-- Big Text -->
+                <h2 class="big-text">Music</h2>
+            </div>
+
+            <!-- Single Hero Slide -->
+            <div class="single-hero-slide d-flex align-items-center justify-content-center">
+                <!-- Slide Img -->
+                <div class="slide-img bg-img" style="background-image: url(../public/img/home/bg-img/bg-2.jpg);"></div>
+                <!-- Slide Content -->
+                <div class="hero-slides-content text-center">
+                    <h2 data-animation="fadeInUp" data-delay="100ms">Artist <span>Artist</span></h2>
+                    <p data-animation="fadeInUp" data-delay="300ms">An Explorer</p>
+                </div>
+                <!-- Big Text -->
+                <h2 class="big-text">Artist</h2>
+            </div>
+
+            <!-- Single Hero Slide -->
+            <div class="single-hero-slide d-flex align-items-center justify-content-center">
+                <!-- Slide Img -->
+                <div class="slide-img bg-img" style="background-image: url(../public/img/home/bg-img/bg-3.jpg);"></div>
+                <!-- Slide Content -->
+                <div class="hero-slides-content text-center">
+                    <h2 data-animation="fadeInUp" data-delay="100ms">Festival <span>Festival</span></h2>
+                    <p data-animation="fadeInUp" data-delay="300ms">A Celebration</p>
+                </div>
+                <!-- Big Text -->
+                <h2 class="big-text">Festival</h2>
+            </div>
+
+        </div>
+        <!-- bg gradients -->
+        <div class="bg-gradients"></div>
+
+        <!-- Slide Down -->
+        <div class="slide-down" id="scrollDown">
+            <h6>Slide Down</h6>
+            <div class="line"></div>
+        </div>
+    </section>
+    <!-- ##### Hero Area End ##### -->
+
+    <!-- ##### About Us Area Start ##### -->
+    
+    <!-- ##### About Us Area End ##### -->
+
+    <!-- ##### Upcoming Shows Area Start ##### -->
+    <div class="upcoming-shows-area section-padding-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading">
+                        <h2>Upcoming shows</h2>
+                        {{!-- <h6>Sed porta cursus enim, vitae maximus felis luctus iaculis.</h6> --}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <!-- Upcoming Shows Content -->{{#each display}}
+                    <div class="upcoming-shows-content">
+                        
+                        <!-- Single Upcoming Shows -->
+                        <div class="single-upcoming-shows d-flex align-items-center flex-wrap">
+                            <div class="shows-date">
+                                {{!-- <h2>17 <span>July</span></h2> --}}
+                            </div>
+                            <div class="shows-desc d-flex align-items-center">
+                                <div class="shows-img">
+                                    {{!-- <img src="img/bg-img/s1.jpg" alt=""> --}}
+                                    <img src="../public/img/home/bg-img/s4.jpg" alt="">
+                                </div>
+                                <div class="shows-name">
+                                    <h6>{{this.title}}</h6>
+                                    <p>{{this.artist_name}}</p>
+                                </div>
+                            </div>
+                            <div class="shows-location">
+                                <p>{{this.link}}</p>
+                            </div>
+                            {{!-- <div class="shows-time">
+                                <p>20:30</p>
+                            </div> --}}
+                            <div class="buy-tickets">
+                                <a href="/userlogin" class="btn musica-btn">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Upcoming Shows Area End ##### -->
+
+    <!-- ##### Music Player Area Start ##### -->
+    <div class="music-player-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="music-player-slides owl-carousel">
+
+                        <!-- Single Music Player -->
+                        <div class="single-music-player">
+                            {{!-- <img src="img/bg-img/mp1.jpg" alt=""> --}}
+                            <img src="../public/img/home/bg-img/mp1.jpg" alt="">
+
+                            <div class="music-info d-flex justify-content-between">
+                                <div class="music-text">
+                                    <h5>Artist’s/Band Name</h5>
+                                    <p>Love is all Around</p>
+                                </div>
+                                <div class="music-play-icon">
+                                    <audio preload="auto" controls>
+                                    <source src="audio/dummy-audio.mp3">
+                                </audio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Single Music Player -->
+                        <div class="single-music-player">
+                            <img src="../public/img/home/bg-img/mp2.jpg" alt="">
+
+                            <div class="music-info d-flex justify-content-between">
+                                <div class="music-text">
+                                    <h5>Artist’s/Band Name</h5>
+                                    <p>Love is all Around</p>
+                                </div>
+                                <div class="music-play-icon">
+                                    <audio preload="auto" controls>
+                                    <source src="audio/dummy-audio.mp3">
+                                </audio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Single Music Player -->
+                        <div class="single-music-player">
+                            <img src="../public/img/home/bg-img/mp3.jpg" alt="">
+
+                            <div class="music-info d-flex justify-content-between">
+                                <div class="music-text">
+                                    <h5>Artist’s/Band Name</h5>
+                                    <p>Love is all Around</p>
+                                </div>
+                                <div class="music-play-icon">
+                                    <audio preload="auto" controls>
+                                    <source src="audio/dummy-audio.mp3">
+                                </audio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Single Music Player -->
+                        <div class="single-music-player">
+                            <img src="../public/img/home/bg-img/mp4.jpg" alt="">
+
+                            <div class="music-info d-flex justify-content-between">
+                                <div class="music-text">
+                                    <h5>Artist’s/Band Name</h5>
+                                    <p>Love is all Around</p>
+                                </div>
+                                <div class="music-play-icon">
+                                    <audio preload="auto" controls>
+                                    <source src="audio/dummy-audio.mp3">
+                                </audio>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Music Player Area End ##### -->
+
+    <!-- ##### Featured Album Area Start ##### -->
+    
+    <!-- ##### Featured Album Area End ##### -->
+
+    <!-- ##### Music Artists Area Start ##### -->
+    <div class="musica-music-artists-area d-flex flex-wrap clearfix">
+        <!-- Music Search -->
+        <div class="music-search bg-img bg-overlay2 wow fadeInUp" data-wow-delay="300ms" style="background-image: url(../public/img/home/bg-img/bg-9.jpg);">
+            <!-- Content -->
+            <div class="music-search-content">
+                <h2>Events</h2>
+                <h4>Search for the best events</h4>
+            </div>
+        </div>
+
+        <!-- Artists Search -->
+        <div class="artists-search bg-img bg-overlay2 wow fadeInUp" data-wow-delay="600ms" style="background-image: url(../public/img/home/bg-img/bg-1.jpg);">
+            <!-- Content -->
+            <div class="music-search-content">
+                <h2>Artists</h2>
+                <h4>Search for the best artists</h4>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Music Artists Area End ##### -->
+
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area section-padding-30-0">
+        <div class="container-fluid">
+            <div class="col-12 col-md-6 col-xl-3">
+                    <div class="footer-widget-area mb-100">
+                        <br>
+                        <a href="index.html" class="nav-brand"><!-- <img src="img/core-img/logo.png" alt=""> -->
+                            <h1 style="font-family: 'Dancing Script', cursive; font-size: 50px">JAMS</h1>
+                        </a>
+                        <p class="copywrite-text"><a href="#"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | made with <i class="fa fa-heart-o" aria-hidden="true"></i>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <!-- Footer Widget Area -->
+                
+
+                <!-- Footer Widget Area -->
+                
+        </div>
+    </footer>
+    <!-- ##### Footer Area Start ##### -->
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="../public/js/home/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="../public/js/home/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="../public/js/home/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="../public/js/home/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="../public/js/home/active.js"></script>
+</body>
+
+</html>

@@ -49,6 +49,7 @@
                     <li class=""><a href="/users_home_artist_info_training">Training</a></li> 
                     <li class=""><a href="/users_home_artist_info_schedule">Schedule</a></li>
                     <li class=""><a href="/users_home_artist_info_awards">Awards</a></li>
+                    <li class=""><a href="/users_home_artist_info_gallery">Gallery</a></li>
                </ul>
                <ul class="nav navbar-nav navbar-right">
                     <li><a href="/users_home"><i style="font-size: 13px;"><i class='fas fa-arrow-left'></i> Back to HOME</i></a></li> 
@@ -84,13 +85,13 @@
                         <input type="text" name="eventName" hidden value={{this.event_name}} >
                         {{/each}}
                          <div class="col-md-7 col-sm-7">
-                              <input name="eventName" type="text" class="form-control" id="name" disabled placeholder="" value={{eventName}}>
+                              <input name="eventName" type="text" class="form-control" id="name" disabled placeholder="" value={{eventName}} >
                          </div>
                          <div class="col-md-6 col-sm-6">
-                              <textarea name="like" rows="5" class="form-control" id="message" placeholder="Like"></textarea>
+                              <textarea name="like" rows="5" class="form-control" id="message" placeholder="Like" required></textarea>
                          </div>
                          <div class="col-md-6 col-sm-6">
-                              <textarea name="dislike" rows="5" class="form-control" id="message" placeholder="Dislike"></textarea>
+                              <textarea name="dislike" rows="5" class="form-control" id="message" placeholder="Dislike" required></textarea>
                          </div>
                          <div class="col-md-10 col-sm-10">
                              <p>

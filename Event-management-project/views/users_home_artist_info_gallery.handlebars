@@ -43,12 +43,12 @@
           </div>
           <div class="collapse navbar-collapse">
                <ul class="nav navbar-nav navbar-center">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class=""><a href="#">Home</a></li>
                     <li><a href="/users_home_artist_info_performance">Performance</a></li>
                     <li><a href="/users_home_artist_info_training">Training</a></li> 
                     <li class=""><a href="/users_home_artist_info_schedule">Schedule</a></li>
                     <li class=""><a href="/users_home_artist_info_awards">Awards</a></li>
-                    <li class=""><a href="/users_home_artist_info_gallery">Gallery</a></li>
+                    <li class="active"><a href="/users_home_artist_info_gallery">Gallery</a></li>
                </ul>
                <ul class="nav navbar-nav navbar-right">
                     <li><a href="/users_home"><i style="font-size: 13px;"><i class='fas fa-arrow-left'></i> Back to HOME</i></a></li> 
@@ -60,15 +60,13 @@
 
 <!-- Home Section -->
 
-<section id="home" class="main-home parallax-section">
+<section id="home" class="main-about parallax-section">
      <div class="overlay"></div>
-     <div id="particles-js"></div>
      <div class="container">
           <div class="row">
-               <div class="col-md-12 col-sm-12">{{#each display}}
-                    <h1>Hello! This is {{this.username}}.</h1>{{/each}}
-                    <h4>Discover more about me</h4>
-                    <a href="#b" class="smoothScroll btn btn-default"><i class='fas fa-angle-double-down' style='font-size:21px'></i></a>
+
+               <div class="col-md-12 col-sm-12">
+                    <h1>Gallery</h1>
                </div>
 
           </div>
@@ -77,23 +75,22 @@
 
 <!-- Blog Section -->
 
-<section id="asdb">
-     <div class="container" id="b">
+<section id="gallery">
+     <div class="container">
           <div class="row">
+
                <div class="col-md-offset-1 col-md-10 col-sm-12">
-                    <div class="blog-post-thumb">
-                         
-                         <div class="blog-post-title">
-                              <h3><a href="#">About me</a></h3>
+
+                   {{#each display}}
+                    <div class="col-md-6 col-sm-6">
+                         <div class="gallery-thumb">
+                              {{!-- <a href="images/gallery-image1.jpg" class="image-popup"> --}}
+                                   <img src="../public/img/{{this.image_name}}" class="img-responsive" alt="Gallery Image">
+                              {{!-- </a> --}}
                          </div>
-                        {{#each display}}
-                        <div class="container p-5">
-                        <div class="blog-post-des">
-                              <p>{{this.about}}.</p>
-                         </div>{{/each}}
-                        </div>
-                         
                     </div>
+                    {{/each}}
+                    
                </div>
           </div>
      </div>

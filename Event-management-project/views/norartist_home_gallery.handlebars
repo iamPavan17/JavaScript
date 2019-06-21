@@ -19,7 +19,7 @@
     <p>{{this.badge1}}</p>
     <p>{{this.badge2}}</p>
     {{/each}} --}}
-    {{#each display}}
+    {{!-- {{#each display}} --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand pl-4" href="#">Welcome {{this.username}}!</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,14 +28,14 @@
 
       <div class="collapse navbar-collapse pl-5" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto pl-5">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Bio <span class="sr-only">(current)</span></a>
+          <li class="nav-item pl-2">
+            <a class="nav-link" href="#">Bio </a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_performance">Performance list</a>
           </li>
-          <li class="nav-item pl-2">
-            <a class="nav-link" href="/norartist_home_gallery">Gallery</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/norartist_home_gallery">Gallery <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item pl-2">
             <a class="nav-link" href="/norartist_home_schedule">Schedule</a>
@@ -58,43 +58,46 @@
             </form>
       </div>
     </nav>
-      <div class="toast ml-auto" role="alert" data-delay="700" data-autohide="false">
-        <div class="toast-header pl-3">
-            <strong class="mr-auto text-primary">Credits:</strong>
-            <a class="text-muted ">{{this.rewards}} <i>points</i></a>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-    </div>
-    <div class="toast ml-auto" role="alert" data-delay="700" data-autohide="false">
-        <div class="toast-header pl-3">
-            <strong class="mr-auto text-primary">Badge:</strong>
-            <a class="text-muted ">{{this.badge1}} </a>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-    </div>
-    <div class="container pt-5">
-        <h3>Bio</h3>
-        <br>
-        <div style="border: 1px solid grey; width: 100%; height: 100%; border-radius: 17px;">
-            <p class="p-5">{{this.about}}</p>
-        </div>
-    </div>
-    <br>
-    <div class="container pt-5">
-        <form method="POST" action="norartist_about_update" >
-            <div class="form-group">
-                <textarea class="form-control" name="about" id="exampleFormControlTextarea1" rows="5">{{this.about}}</textarea><br><br>
-                <div class="col-auto">
-                    <input type="submit" value="UPDATE" class="btn btn-outline-primary" class="col-6"> {{msg}}
+      <div class="container pt-5">
+        <h2 class="text-center">Upload image</h2><br><br>
+        <div class="container">
+            <form method="POST" action="upload1" enctype="multipart/form-data">
+            <div class="form-row col-6" style="margin-left: 26%;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insimage" accept="">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+                    </div>
                 </div>
-              </div>
-        </form>
-    </div>
-    {{/each}}
+                <div class="form-row col-12">
+                  <label for="s">Caption</label>
+                  <input type="text" class="form-control" id="s" name="caption" required>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
+                </div>
+                <div class="form-group col-6 pt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="submit"> Submit </button><br><br><a href='/viewGallery1'>View Gallery(images)</a>
+                </div>
+            </form>     
+    </div> 
+    <div class="container pt-2">
+        <h2 class="text-center">Upload video</h2><br><br>
+        <div class="container">
+            <form method="POST" action="upload1vid" enctype="multipart/form-data">
+            <div class="form-row col-6" style="margin-left: 26%;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insimage" accept="">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose video</label>
+                    </div>
+                </div>
+                <div class="form-row col-12">
+                  <label for="s">Caption</label>
+                  <input type="text" class="form-control" id="s" name="caption" required>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message1}}</span>
+                </div>
+                <div class="form-group col-6 pt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="submit"> Submit </button><br><br><a href='/viewGallery1vid'>View Gallery(video)</a>
+                </div>
+            </form>     
+    </div> 
 </body>
     <script>
       $('.toast').toast('show');

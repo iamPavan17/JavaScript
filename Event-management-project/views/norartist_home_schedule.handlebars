@@ -30,7 +30,7 @@
             <a class="nav-link" href="/norartist_home_performance">Performance list </a>
           </li>
           <li class="nav-item pl-2">
-            <a class="nav-link" href="#">Gallery</a>
+            <a class="nav-link" href="/norartist_home_gallery">Gallery</a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="/norartist_home_schedule">Schedule  <span class="sr-only">(current)</span></a>
@@ -58,13 +58,13 @@
       <form method="POST" action="norartist_home_schedule">
         <div class="row">
           <div class="form-group col-6">
-              date: <input type="date" name="date" min="2019-05-11" class="form-control">
+              date: <input type="date" name="date" min="2019-05-11" class="form-control" required>
           </div>
           <div class="form-group col-6">
-              title: <input type="text" name="title" class="form-control">
+              title: <input type="text" name="title" class="form-control" required>
           </div>
           <div class="form-group col-6">
-            link: <input type="text" name="link" class="form-control">
+            link: <input type="text" name="link" class="form-control" required>
           </div>
         </div>
           <input type="submit" class="btn btn-outline-primary">
