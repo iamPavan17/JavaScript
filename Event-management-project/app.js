@@ -95,7 +95,7 @@ app.get('/norartistlogin', (req, res) => {
 })
 
 app.get('/logout', (req, res) => {
-    res.redirect('/');
+    res.redirect('/home');
     req.session.destroy();
 });
 
@@ -364,7 +364,7 @@ app.post('/userreg', (req, res) => {
     let sql = 'INSERT INTO users SET ?';
     let query = db.query(sql, data, (err, result) => {
         if(err) throw err;
-        res.redirect('/');
+        res.redirect('/home');
     });
 });
 
@@ -625,7 +625,7 @@ app.post('/artist_forgot_password', (req, res) => {
         let sql = `UPDATE new_artist SET password = '${data.new}' WHERE email = '${data.email}'`;
         let query = db.query(sql, (err, result) => {
             if(err) throw err;
-            res.redirect('/');
+            res.redirect('/home');
         });
     }
     else {
@@ -1387,7 +1387,7 @@ app.post('/norartistreg', (req, res) => {
                 let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}', ${data.phone})`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
-                    res.redirect('/');
+                    res.redirect('/home');
                 });
             });
         }
@@ -1419,7 +1419,7 @@ app.post('/artistreg', (req, res) => {
                 let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone})`;
                 let query2 = db.query(sql2, (err, result) => {
                     if(err) throw err;
-                    res.redirect('/');
+                    res.redirect('/home');
                 });
             });
         }
