@@ -1438,28 +1438,40 @@ app.post('/artistreg', (req, res) => {
         email: req.body.email,
         phone: req.body.phone
     };
-    let sql = `SELECT COUNT(*) FROM invite_artist WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
-    let query = db.query(sql, (err, result) => {
+    let sqlUnique = `SELECT COUNT(*) FROM new_artist WHERE username = '${data.username}'`;
+    let queryUnique = db.query(sqlUnique, (err, result) => {
         if(err) throw err;
-        var countResult = result[0];
-        var count = [];
-        for(var i in countResult) {
-            count.push(countResult[i]);
-        }
-        if(count[0]) {
-            let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+        var cnt = Object.values(result[0]);
+        // console.log(cnt[0])
+        if(cnt[0] == 0) {
+            let sql = `SELECT COUNT(*) FROM invite_artist WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
+            let query = db.query(sql, (err, result) => {
                 if(err) throw err;
-                let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone})`;
-                let query2 = db.query(sql2, (err, result) => {
-                    if(err) throw err;
-                    res.redirect('/home');
-                });
-            });
+                var countResult = result[0];
+                var count = [];
+                for(var i in countResult) {
+                    count.push(countResult[i]);
+                }
+                if(count[0]) {
+                    let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                        if(err) throw err;
+                        let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone})`;
+                        let query2 = db.query(sql2, (err, result) => {
+                            if(err) throw err;
+                            res.redirect('/home');
+                        });
+                    });
+                }
+                else {
+                    res.send('Incorrect Code an/or Email!!');
+                }
+            })
         }
         else {
-            res.send('Incorrect Code an/or Email!!');
+            res.send('Username already existed!!');
         }
     })
+    
 });
 
 app.get('/viewUsers', (req, res) => {
