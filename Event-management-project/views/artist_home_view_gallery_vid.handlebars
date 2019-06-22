@@ -58,47 +58,22 @@
         </ul>
       </div>
     </nav>
-
-    <div class="container pt-5">
-        <h2 class="text-center">Upload image</h2><br><br>
-        <div class="container">
-            <form method="POST" action="upload" enctype="multipart/form-data">
-            <div class="form-row col-6" style="margin-left: 26%;">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insimage" accept="">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+    <br><br><br>
+    <div class="container p-5" style="border: 1px solid rgb(218, 213, 213); border-radius: 5px;">
+          <div class="row">
+              {{#each display}}
+              <div class="col-4">
+                  <div class="card" style="width: 18rem;">
+                    <video class="card-img-top" controls>
+                        <source src="../public/img/{{this.image_name}}" type="video/mp4">
+                    </video>
+                    <div class="card-body">
+                      <p class="card-text">{{this.caption}}.</p>
                     </div>
-                </div>
-                <div class="form-row col-12">
-                  <label for="s">Caption</label>
-                  <input type="text" class="form-control" id="s" name="caption" required>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
-                </div>
-                <div class="form-group col-6 pt-3">
-                    <button type="submit" class="btn btn-outline-primary" name="submit"> Submit </button><br><br><a href='/viewGallery'>View Gallery</a>
-                </div>
-            </form>     
-    </div> 
-
-    <div class="container pt-2">
-        <h2 class="text-center">Upload video</h2><br><br>
-        <div class="container">
-            <form method="POST" action="uploadvid" enctype="multipart/form-data">
-            <div class="form-row col-6" style="margin-left: 26%;">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="insimage" accept="">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose video</label>
-                    </div>
-                </div>
-                <div class="form-row col-12">
-                  <label for="s">Caption</label>
-                  <input type="text" class="form-control" id="s" name="caption" required>&nbsp;&nbsp;<span style="color: red; font-size: 14px;">{{message}}</span>
-                </div>
-                <div class="form-group col-6 pt-3">
-                    <button type="submit" class="btn btn-outline-primary" name="submit"> Submit </button><br><br><a href='/viewGalleryvid'>View Gallery(video)</a>
-                </div>
-            </form>     
+                  </div>
+              </div>
+              {{/each}}
+          </div>
     </div>
       
 </body>
