@@ -1394,40 +1394,51 @@ app.post('/norartistreg', (req, res) => {
     }
     console.log(data.badge);
     // console.log(data);
-    let sql = `SELECT COUNT(*) FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
-    let query = db.query(sql, (err, result) => {
+    let sqlUnique = `SELECT COUNT(*) FROM new_artist WHERE username = '${data.username}'`;
+    let queryUnique = db.query(sqlUnique, (err, result) => {
         if(err) throw err;
-        var countResult = result[0];
-        var count = [];
-        for(var i in countResult) {
-            count.push(countResult[i]);
-        }
-        if(count[0]) {
-            let query1 = db.query(`UPDATE invite_artist2 SET status = 'accepted', count = 1 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
-                // let creditsUp = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = ''`)
-                let query3 = db.query(`SELECT * FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
-                    var superUserObj = {};
-                    let a = result[0];
-                    for(var i in a) {
-                        superUserObj[i] = a[i];
-                    }
-                    // console.log(result);
-                    let query4 = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = '${superUserObj.super_user}'`, (err, result) => {
+        var cnt = Object.values(result[0]);
+        if(cnt[0] == 0) {
+            let sql = `SELECT COUNT(*) FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            var countResult = result[0];
+            var count = [];
+            for(var i in countResult) {
+                count.push(countResult[i]);
+            }
+            if(count[0]) {
+                let query1 = db.query(`UPDATE invite_artist2 SET status = 'accepted', count = 1 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                    // let creditsUp = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = ''`)
+                    let query3 = db.query(`SELECT * FROM invite_artist2 WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
+                        var superUserObj = {};
+                        let a = result[0];
+                        for(var i in a) {
+                            superUserObj[i] = a[i];
+                        }
+                        // console.log(result);
+                        let query4 = db.query(`UPDATE new_artist SET rewards = rewards + 50 WHERE username = '${superUserObj.super_user}'`, (err, result) => {
+                            if(err) throw err;
+                        });
+                    });
+                    if(err) throw err;
+                    let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}', ${data.phone})`;
+                    let query2 = db.query(sql2, (err, result) => {
                         if(err) throw err;
+                        res.redirect('/home');
                     });
                 });
-                if(err) throw err;
-                let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}', ${data.phone})`;
-                let query2 = db.query(sql2, (err, result) => {
-                    if(err) throw err;
-                    res.redirect('/home');
-                });
-            });
-        }
+            }
+            else {
+                res.send('Incorrect Code an/or Email!!');
+            }
+        });
+        } 
         else {
-            res.send('Incorrect Code an/or Email!!');
+            res.send('Username already existed!!');
         }
     })
+    
 });
 
 app.post('/artistreg', (req, res) => {
@@ -1470,7 +1481,7 @@ app.post('/artistreg', (req, res) => {
         else {
             res.send('Username already existed!!');
         }
-    })
+    });
     
 });
 
