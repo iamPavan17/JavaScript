@@ -108,7 +108,7 @@ app.get('/listartist', (req, res) => {
 });
 
 app.get('/listaccartist', (req, res) => {
-    let sql = 'SELECT * FROM new_artist';
+    let sql = `SELECT * FROM new_artist WHERE type = 'superuser'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         res.render('admin_home_listaccartist', {display: result});
@@ -723,11 +723,11 @@ app.post('/norartist_about_update', (req, res) => {
         about: req.body.about
     };
 
-    let sql = `UPDATE new_artist2 SET about = '${data.about}' WHERE username = '${req.session.username}'`;
+    let sql = `UPDATE new_artist SET about = '${data.about}' WHERE username = '${req.session.username}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
-        let query2 = db.query(`SELECT * FROM new_artist2 WHERE username = '${req.session.username}'`, (err, result) => {
+        let query2 = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
             if(err) throw err;
             // result['user'] = req.session.username;
             res.render('norartist_home', {display: result});
@@ -736,7 +736,7 @@ app.post('/norartist_about_update', (req, res) => {
 });
 
 app.get('/norartist_home', (req, res) => {
-    let query2 = db.query(`SELECT * FROM new_artist2 WHERE username = '${req.session.username}'`, (err, result) => {
+    let query2 = db.query(`SELECT * FROM new_artist WHERE username = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
         // console.log(result[0]);
         // result['user'] = req.session.username;
@@ -750,7 +750,7 @@ app.post('/norartistlogin', (req, res) => {
         password: req.body.password
     };
 
-    let sql = `SELECT COUNT(*) FROM new_artist2 WHERE username = '${data.username}' AND password = '${data.password}'`;
+    let sql = `SELECT COUNT(*) FROM new_artist WHERE username = '${data.username}' AND password = '${data.password}'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         var countResult = result[0];
@@ -759,13 +759,13 @@ app.post('/norartistlogin', (req, res) => {
             count.push(countResult[i]);
         }
         if(count[0]) {
-            let sql2 = `UPDATE new_artist2 SET last_login = NOW() WHERE username = '${data.username}' AND password = '${data.password}' `;
+            let sql2 = `UPDATE new_artist SET last_login = NOW() WHERE username = '${data.username}' AND password = '${data.password}' `;
             let query2 = db.query(sql2, (err, result) => {
                 if(err) throw err;
                 req.session.loggedin = true;
                 req.session.username = data.username;
 
-                let query3 = db.query(`SELECT * FROM new_artist2 WHERE username = '${data.username}' AND password = '${data.password}'`, (err, result) => {
+                let query3 = db.query(`SELECT * FROM new_artist WHERE username = '${data.username}' AND password = '${data.password}'`, (err, result) => {
                     if(err) throw err;
                     result['user'] = data.username;
                     res.render('norartist_home', {display: result});
@@ -818,7 +818,7 @@ app.get('/userlogin', (req, res) => {
 });
 
 app.get('/users_home_artist', (req, res) => {
-    let sql = 'SELECT * FROM new_artist';
+    let sql = `SELECT * FROM new_artist WHERE type='superuser'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         // console.log(result);
@@ -1139,7 +1139,7 @@ app.post('/users_home_artist_info2', (req, res) => {
     let data = {
         id: req.body.id
     };
-    let sql = `SELECT * FROM new_artist2 WHERE id = ${data.id}`;
+    let sql = `SELECT * FROM new_artist WHERE id = ${data.id}`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         // console.log(result[0].username)
@@ -1151,7 +1151,7 @@ app.post('/users_home_artist_info2', (req, res) => {
 });
 
 app.get('/users_home_artist2', (req, res) => {
-    let sql = 'SELECT * FROM new_artist2';
+    let sql = `SELECT * FROM new_artist WHERE type='artist'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         // console.log(result);
@@ -1422,7 +1422,7 @@ app.post('/norartistreg', (req, res) => {
                         });
                     });
                     if(err) throw err;
-                    let sql2 = `INSERT INTO new_artist2 (username, email, rewards, about, last_login, password, badge1, badge2, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', 'newbie', '${data.badge}', ${data.phone})`;
+                    let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'artist')`;
                     let query2 = db.query(sql2, (err, result) => {
                         if(err) throw err;
                         res.redirect('/home');
@@ -1466,7 +1466,7 @@ app.post('/artistreg', (req, res) => {
                 if(count[0]) {
                     let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
                         if(err) throw err;
-                        let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone})`;
+                        let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'superuser')`;
                         let query2 = db.query(sql2, (err, result) => {
                             if(err) throw err;
                             res.redirect('/home');
@@ -1486,7 +1486,7 @@ app.post('/artistreg', (req, res) => {
 });
 
 app.get('/viewUsers', (req, res) => {
-    let sql = 'SELECT * FROM new_artist';
+    let sql = `SELECT * FROM new_artist WHERE type='superuser'`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         let query1 = db.query(sql, (err, result) => {
