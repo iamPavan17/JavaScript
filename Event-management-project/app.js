@@ -395,14 +395,24 @@ app.post('/norartist_home_training', (req, res) => {
         contact: req.body.contact,
         username: req.session.username
     };
-    let sql = 'INSERT INTO artist_training SET ?';
-    let query = db.query(sql, data, (err, result) => {
-        if(err) throw err;
+    let phoneNumberVal = /^\d{10}$/;
+    if(data.contact.match(phoneNumberVal)) {
+        let sql = 'INSERT INTO artist_training SET ?';
+        let query = db.query(sql, data, (err, result) => {
+            if(err) throw err;
+            let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${data.username}'`, (err, result) => {
+                if(err) throw err;
+                res.render('norartist_home_training', {display: result});
+            })
+        });
+    }
+    else {
         let query2 = db.query(`SELECT * FROM artist_training WHERE username = '${data.username}'`, (err, result) => {
             if(err) throw err;
-            res.render('norartist_home_training', {display: result});
-        })
-    });
+            res.render('norartist_home_training', {display: result, msg: 'Phone is not valid'});
+        });
+    }
+
 });
 
 app.post('/updatecredits', (req, res) => {
@@ -1014,6 +1024,44 @@ app.post('/upload', upload.single('insimage'), (req, res) => {
     }
 });
 
+app.post('/uploadprofile', upload.single('insimage'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = "Error!!! in file upload.";
+        res.render('norartist_home', {message: message});
+    }
+    else if(req.file.mimetype !== 'image/jpeg') {
+        res.render('norartist_home', {message: 'File is not in proper format!!'});
+    }
+    else {
+        console.log('File received');
+        let sql = `UPDATE new_artist SET profile_image = '${req.file.filename}' WHERE username = '${req.session.username}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+                res.redirect('norartist_home');
+        });
+    }
+});
+
+app.post('/uploadprofile1', upload.single('insimage'), (req, res) => {
+    if(!req.file) {
+        console.log('No file received!!');
+        message = "Error!!! in file upload.";
+        res.render('artist_home', {message: message});
+    }
+    else if(req.file.mimetype !== 'image/jpeg') {
+        res.render('artist_home', {message: 'File is not in proper format!!'});
+    }
+    else {
+        console.log('File received');
+        let sql = `UPDATE new_artist SET profile_image = '${req.file.filename}' WHERE username = '${req.session.username}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+                res.redirect('artist_home');
+        });
+    }
+});
+
 app.get('/addQuestions', (req, res) => {
     let query = db.query(`SELECT * FROM questions`, (err, result) => {
         if(err) throw err;
@@ -1160,6 +1208,72 @@ app.get('/users_home_artist2', (req, res) => {
     });
 });
 
+app.get('/norartistforgotpassword', (req, res) => {
+    res.render('norartistforgotpassword');
+});
+
+app.post('/norartistforgotpassword', (req, res) => {
+    let data = {
+        username: req.body.username,
+        email: req.body.email,
+        pass1: req.body.pass1,
+        pass2: req.body.pass2
+    };
+    if(data.pass1 !== data.pass2) {
+        res.render('norartistforgotpassword', {msg: 'Passwords are not matching!!'});
+    }
+    else {
+        let sql = `SELECT COUNT(*) FROM new_artist WHERE username = '${data.username}' AND email = '${data.email}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            // console.log(Object.values(result[0]));
+            let count = Object.values(result[0]);
+            if(count[0]) {
+                let query = db.query(`UPDATE new_artist SET password = '${data.pass1}' WHERE username = '${data.username}'`, (err, result) => {
+                    if(err) throw err;
+                    res.render('norartist_login');
+                });
+            } 
+            else {
+                res.render('norartistforgotpassword', {msg: 'Invalid username/email'});
+            }
+        });
+    }
+});
+
+app.get('/userforgotpassword', (req, res) => {
+    res.render('userforgotpassword');
+});
+
+app.post('/userforgotpassword', (req, res) => {
+    let data = {
+        username: req.body.username,
+        email: req.body.email,
+        pass1: req.body.pass1,
+        pass2: req.body.pass2
+    };
+    if(data.pass1 !== data.pass2) {
+        res.render('userforgotpassword', {msg: 'Passwords are not matching!!'});
+    }
+    else {
+        let sql = `SELECT COUNT(*) FROM users WHERE name = '${data.username}' AND email = '${data.email}'`;
+        let query = db.query(sql, (err, result) => {
+            if(err) throw err;
+            // console.log(Object.values(result[0]));
+            let count = Object.values(result[0]);
+            if(count[0]) {
+                let query = db.query(`UPDATE users SET password = '${data.pass1}' WHERE name = '${data.username}'`, (err, result) => {
+                    if(err) throw err;
+                    res.render('users_login');
+                });
+            } 
+            else {
+                res.render('userforgotpassword', {msg: 'Invalid username/email'});
+            }
+        });
+    }
+});
+
 app.get('/users_home', (req, res) => {
     let query = db.query(`SELECT * FROM users WHERE name = '${req.session.username}'`, (err, result) => {
         if(err) throw err;
@@ -1282,18 +1396,29 @@ app.post('/sendAppointment', (req, res) => {
         user_message: req.body.message,
         artist_name: req.session.artistName
     };
-    let sql = 'INSERT INTO artist_appointment SET ?';
-    let query = db.query(sql, data, (err, result) => {
-        if(err) throw err;
-        data['phone'] = req.session.artistPhone;
-        appointmentMessage(data);
+
+    let phoneNumberVal = /^\d{10}$/;
+    if(data.user_phone.match(phoneNumberVal)) {
+        let sql = 'INSERT INTO artist_appointment SET ?';
+        let query = db.query(sql, data, (err, result) => {
+            if(err) throw err;
+            data['phone'] = req.session.artistPhone;
+            appointmentMessage(data);
+            let sql1 = `SELECT * FROM artist_training WHERE username = '${req.session.artistName}'`;
+            let query1 = db.query(sql1, (err, result) => {
+            if(err) throw err;
+            let msg = 'Message has been sent!!!';
+            res.render('users_home_artist_info_training', {display: result, msg: msg})
+        });
+        }); 
+    }
+    else {
         let sql1 = `SELECT * FROM artist_training WHERE username = '${req.session.artistName}'`;
-        let query1 = db.query(sql1, (err, result) => {
-        if(err) throw err;
-        let msg = 'Message has been sent!!!';
-        res.render('users_home_artist_info_training', {display: result, msg: msg})
-    });
-    }); 
+        let query1 = db.query(sql, (err, result) => {
+            let msg = 'Phone number is not valid!!!';
+            res.render('users_home_artist_info_training', {display: result, msg: msg})
+        });
+    }
 });
 
 app.post('/inviteartist', (req, res) => {
@@ -1422,7 +1547,7 @@ app.post('/norartistreg', (req, res) => {
                         });
                     });
                     if(err) throw err;
-                    let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'artist')`;
+                    let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type, profile_image) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'artist', 'null')`;
                     let query2 = db.query(sql2, (err, result) => {
                         if(err) throw err;
                         res.redirect('/home');
@@ -1466,7 +1591,7 @@ app.post('/artistreg', (req, res) => {
                 if(count[0]) {
                     let query1 = db.query(`UPDATE invite_artist SET status = 'accepted' WHERE a_code = '${data.code}' AND a_email = '${data.email}'`, (err, result) => {
                         if(err) throw err;
-                        let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'superuser')`;
+                        let sql2 = `INSERT INTO new_artist (username, email, rewards, about, last_login, password, phone, type, profile_image) VALUES ('${data.username}', '${data.email}', 100, 'Need to update!!', NOW(), '${data.password}', ${data.phone}, 'superuser', 'null')`;
                         let query2 = db.query(sql2, (err, result) => {
                             if(err) throw err;
                             res.redirect('/home');
